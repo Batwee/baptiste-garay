@@ -166,7 +166,7 @@
     .tl-content p, .tl-content ul { font-size: 0.95rem; color: #cbd5e1; margin-bottom: 10px; }
     .tl-content ul { padding-left: 20px; }
 
-    /* --- EFFET WOW : REVEAL CODE SOUS L'IMAGE --- */
+    /* --- EFFET WOW : REVEAL "LIQUIDE/MAGIQUE" SOUS L'IMAGE --- */
     .project-visual {
       position: relative;
       width: 100%;
@@ -176,34 +176,52 @@
       overflow: hidden;
       border: 1px solid var(--border);
       cursor: crosshair;
+      
+      /* Variables par défaut pour la position de la souris */
+      --mouse-x: 50%;
+      --mouse-y: 50%;
     }
     
-    /* Le code en arrière plan (Dessous) */
-    .visual-code {
-      position: absolute;
-      top: 0; left: 0; width: 100%; height: 100%;
-      background: #0d1117;
-      padding: 15px;
-      font-family: var(--font-code);
-      font-size: 0.75rem;
-      color: #56b6c2;
-      overflow: hidden;
-      z-index: 1;
-    }
-    
-    /* L'image au premier plan (Dessus) */
+    /* L'image de présentation (en dessous par défaut) */
     .visual-img {
       position: absolute;
       top: 0; left: 0; width: 100%; height: 100%;
       background-size: cover;
       background-position: center;
-      z-index: 2;
-      transition: transform 0.6s cubic-bezier(0.8, 0, 0.2, 1);
+      z-index: 1;
+      transition: filter 0.4s ease, transform 0.4s ease;
     }
     
-    /* L'effet au survol : L'image "glisse" vers le haut comme un rideau */
+    /* Le code source (qui se superpose) */
+    .visual-code {
+      position: absolute;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(13, 17, 23, 0.9);
+      padding: 15px;
+      font-family: var(--font-code);
+      font-size: 0.75rem;
+      color: #56b6c2;
+      z-index: 2;
+      
+      /* C'est ici que la magie opère : Un masque radial qui suit la souris */
+      -webkit-mask-image: radial-gradient(circle 140px at var(--mouse-x) var(--mouse-y), black 20%, transparent 100%);
+      mask-image: radial-gradient(circle 140px at var(--mouse-x) var(--mouse-y), black 20%, transparent 100%);
+      
+      /* Invisible par défaut */
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    /* Au survol du projet */
     .project-visual:hover .visual-img {
-      transform: translateY(-100%);
+      /* On assombrit et on floute légèrement l'image pour un effet de profondeur */
+      filter: brightness(0.4) blur(3px);
+      transform: scale(1.03);
+    }
+    
+    .project-visual:hover .visual-code {
+      /* Le masque de code apparait */
+      opacity: 1;
     }
 
     .github-link {
@@ -340,6 +358,7 @@
             <p>Pipeline automatisé de récupération, nettoyage et transformation de données de scrutins de l’Assemblée nationale. Traitement de milliers de fichiers JSON et génération d’un jeu de données allégé.</p>
             
             <div class="project-visual">
+              <div class="visual-img" style="background-image: url('https://picsum.photos/seed/votes/600/400');"></div>
               <div class="visual-code">
 <pre><code>// Script UpdateVotes
 const fs = require('fs');
@@ -351,7 +370,6 @@ async function cleanData() {
   return json.map(v => ({ id: v.id }));
 }</code></pre>
               </div>
-              <div class="visual-img" style="background-image: url('https://picsum.photos/seed/votes/600/400');"></div>
             </div>
             
             <a href="https://github.com/Batwee/updatevotes" class="github-link"><i class="fab fa-github"></i> Batwee/updatevotes</a>
@@ -367,6 +385,7 @@ async function cleanData() {
             <p>Application cartographique interactive de suivi des incendies en France à partir de données satellitaires et météorologiques.</p>
             
             <div class="project-visual">
+              <div class="visual-img" style="background-image: url('https://picsum.photos/seed/fire/600/400');"></div>
               <div class="visual-code">
 <pre><code># Streamlit App
 import streamlit as st
@@ -377,7 +396,6 @@ def init_map():
     folium.Marker([43.6, 3.8]).add_to(m)
     return m</code></pre>
               </div>
-              <div class="visual-img" style="background-image: url('https://picsum.photos/seed/fire/600/400');"></div>
             </div>
 
             <a href="https://github.com/Batwee/incendies-france" class="github-link"><i class="fab fa-github"></i> Batwee/incendies-france</a>
@@ -393,6 +411,7 @@ def init_map():
             <p>Application mobile de suivi de portefeuille et d’analyse de marchés financiers, avec indicateurs techniques, visualisation des allocations et récupération de données via API.</p>
             
             <div class="project-visual">
+              <div class="visual-img" style="background-image: url('https://picsum.photos/seed/invest/600/400');"></div>
               <div class="visual-code">
 <pre><code>// React Native Component
 import { supabase } from './lib/supabase'
@@ -404,7 +423,6 @@ export default function Portfolio() {
   }, [])
 }</code></pre>
               </div>
-              <div class="visual-img" style="background-image: url('https://picsum.photos/seed/invest/600/400');"></div>
             </div>
 
             <a href="https://github.com/Batwee/weeinvest" class="github-link"><i class="fab fa-github"></i> Batwee/weeinvest</a>
@@ -532,5 +550,22 @@ export default function Portfolio() {
     </div>
   </section>
 
+  <!-- LE SCRIPT POUR L'EFFET "LIQUIDE MAGIQUE" -->
+  <script>
+    document.querySelectorAll('.project-visual').forEach(visual => {
+      visual.addEventListener('mousemove', (e) => {
+        // On récupère les dimensions de la boite du projet
+        const rect = visual.getBoundingClientRect();
+        
+        // On calcule la position X et Y de la souris à l'intérieur de la boite
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+        
+        // On injecte ces coordonnées directement dans le CSS
+        visual.style.setProperty('--mouse-x', `${x}px`);
+        visual.style.setProperty('--mouse-y', `${y}px`);
+      });
+    });
+  </script>
 </body>
 </html>
