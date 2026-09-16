@@ -196,31 +196,27 @@
     .visual-code {
       position: absolute;
       top: 0; left: 0; width: 100%; height: 100%;
-      background: rgba(13, 17, 23, 0.9);
+      background: rgba(13, 17, 23, 0.95);
       padding: 15px;
       font-family: var(--font-code);
       font-size: 0.75rem;
       color: #56b6c2;
       z-index: 2;
       
-      /* C'est ici que la magie opère : Un masque radial qui suit la souris */
+      /* Le masque radial qui suit la souris */
       -webkit-mask-image: radial-gradient(circle 140px at var(--mouse-x) var(--mouse-y), black 20%, transparent 100%);
       mask-image: radial-gradient(circle 140px at var(--mouse-x) var(--mouse-y), black 20%, transparent 100%);
       
-      /* Invisible par défaut */
       opacity: 0;
       transition: opacity 0.3s ease;
     }
 
-    /* Au survol du projet */
     .project-visual:hover .visual-img {
-      /* On assombrit et on floute légèrement l'image pour un effet de profondeur */
-      filter: brightness(0.4) blur(3px);
+      filter: brightness(0.3) blur(4px);
       transform: scale(1.03);
     }
     
     .project-visual:hover .visual-code {
-      /* Le masque de code apparait */
       opacity: 1;
     }
 
@@ -235,6 +231,11 @@
       font-size: 0.9rem;
     }
     .github-link:hover { text-decoration: underline; }
+    
+    .veille-links a {
+      display: block;
+      margin-top: 10px;
+    }
 
     /* --- RESPONSIVE TIMELINE --- */
     @media screen and (max-width: 800px) {
@@ -247,7 +248,6 @@
 </head>
 <body>
 
-  <!-- HEADER -->
   <header>
     <div class="container">
       <h1>Baptiste GARAY</h1>
@@ -315,7 +315,6 @@
     </div>
   </header>
 
-  <!-- TIMELINE CENTRALE -->
   <section class="timeline-section">
     <div class="container">
       <h2 class="timeline-title">Parcours & Projets</h2>
@@ -327,10 +326,10 @@
           <div class="tl-content">
             <span class="tl-date date-exp">Janvier 2023 - 2026</span>
             <h2>InfoWee - Baptiste GARAY</h2>
-            <h4>Micro-Entreprise et Formateur | Dépannage Informatique (Vendargues/Montpellier)</h4>
+            <h4>Micro-Entreprise et Formateur (Vendargues/Montpellier)</h4>
             <ul>
-              <li><strong>Maintenance Informatique, Domotique, Intelligence Artificielle.</strong></li>
-              <li>Création de la fiche Google en <strong>2025</strong>, mais activité de dépannage effectuée depuis le collège (avant 2016) pour la famille et les amis.</li>
+              <li><strong>Maintenance Informatique, Domotique, IA.</strong></li>
+              <li>Création de la fiche Google en <strong>2025</strong>, activité de dépannage effectuée depuis le collège (avant 2016).</li>
               <li>Professeur d’informatique au Lycée Honoré de Balzac.</li>
               <li>Formateur Informatique en Programmation Ynov Campus Montpellier.</li>
               <li>Création de sites PHP et d’une application de finance en React.</li>
@@ -344,7 +343,7 @@
             <span class="tl-date date-proj">Février 2026</span>
             <h2>Forcer le passage à Windows 11</h2>
             <h4>Windows / Registre / Administration système</h4>
-            <p>Solution permettant de faciliter la migration vers Windows 11 de PC existants non officiellement compatibles, grâce à une modification du registre Windows. Projet destiné aux parcs informatiques scolaires.</p>
+            <p>Solution permettant de faciliter la migration vers Windows 11 de PC existants non officiellement compatibles (registre). Destiné aux parcs informatiques scolaires.</p>
             <a href="https://forge.example.com/forcer-le-passage-a-win-11" class="github-link"><i class="fas fa-link"></i> Forge — forcer-le-passage-a-win-11</a>
           </div>
         </div>
@@ -355,7 +354,7 @@
             <span class="tl-date date-proj">Projet GitHub</span>
             <h2>UpdateVotes</h2>
             <h4>JavaScript / Node.js / GitHub Actions</h4>
-            <p>Pipeline automatisé de récupération, nettoyage et transformation de données de scrutins de l’Assemblée nationale. Traitement de milliers de fichiers JSON et génération d’un jeu de données allégé.</p>
+            <p>Pipeline automatisé de nettoyage de données de scrutins de l’Assemblée nationale.</p>
             
             <div class="project-visual">
               <div class="visual-img" style="background-image: url('https://picsum.photos/seed/votes/600/400');"></div>
@@ -382,7 +381,7 @@ async function cleanData() {
             <span class="tl-date date-proj">Projet GitHub</span>
             <h2>Incendies France</h2>
             <h4>Python / Streamlit / Folium</h4>
-            <p>Application cartographique interactive de suivi des incendies en France à partir de données satellitaires et météorologiques.</p>
+            <p>Application cartographique interactive de suivi des incendies en France.</p>
             
             <div class="project-visual">
               <div class="visual-img" style="background-image: url('https://picsum.photos/seed/fire/600/400');"></div>
@@ -408,7 +407,7 @@ def init_map():
             <span class="tl-date date-proj">Projet GitHub</span>
             <h2>WeeInvest</h2>
             <h4>React Native / Supabase / API</h4>
-            <p>Application mobile de suivi de portefeuille et d’analyse de marchés financiers, avec indicateurs techniques, visualisation des allocations et récupération de données via API.</p>
+            <p>App mobile de suivi de portefeuille et d’analyse financière avec dataviz.</p>
             
             <div class="project-visual">
               <div class="visual-img" style="background-image: url('https://picsum.photos/seed/invest/600/400');"></div>
@@ -432,107 +431,180 @@ export default function Portfolio() {
         <!-- ANALYSE FINANCIERE DEPUTES -->
         <div class="tl-item tl-right type-proj">
           <div class="tl-content">
-            <span class="tl-date date-proj">Projet GitHub</span>
-            <h2>Analyse financière de députés</h2>
-            <h4>Python / Node.js / Streamlit</h4>
-            <p>Application de traitement et de visualisation de données publiques, avec récupération automatisée des données HATVP et interface interactive.</p>
-            <a href="https://github.com/Batwee/analyse-financiere-deputee" class="github-link"><i class="fab fa-github"></i> Batwee/analyse-financiere-deputee</a>
-          </div>
-        </div>
-
-        <!-- ELECTION & DISKWEE -->
-        <div class="tl-item tl-left type-proj">
-          <div class="tl-content">
-            <span class="tl-date date-proj">Projets GitHub</span>
-            <h2>Election & Diskwee</h2>
-            <h4>Python / Streamlit / PhotoRec</h4>
+            <span class="tl-date date-proj">Projets GitHub Divers</span>
+            <h2>Data publique & Outils</h2>
             <ul>
-              <li><strong>Election :</strong> Application d’exploration et de visualisation de données électorales. <a href="https://github.com/Batwee/election" class="github-link" style="margin-top:0;">Batwee/election</a></li>
-              <li><strong>Diskwee :</strong> Développement d’un outil simplifiant la récupération de fichiers, basé sur PhotoRec. <a href="https://github.com/Batwee/diskwee" class="github-link" style="margin-top:0;">Batwee/diskwee</a></li>
+              <li><strong>Analyse HATVP :</strong> Traitement de données publiques. <a href="https://github.com/Batwee/analyse-financiere-deputee" class="github-link">Repo</a></li>
+              <li><strong>Election :</strong> Visualisation électorale. <a href="https://github.com/Batwee/election" class="github-link">Repo</a></li>
+              <li><strong>Diskwee :</strong> Récupération PhotoRec. <a href="https://github.com/Batwee/diskwee" class="github-link">Repo</a></li>
             </ul>
           </div>
         </div>
 
         <!-- CESI BAC+5 -->
-        <div class="tl-item tl-right type-edu">
+        <div class="tl-item tl-left type-edu">
           <div class="tl-content">
             <span class="tl-date date-edu">2021 - 2022</span>
             <h2>Manager en Systèmes d'Information</h2>
-            <h4>École : CESI | Niveau : Bac +5</h4>
-            <p><strong>Status :</strong> Diplômé</p>
+            <h4>École : CESI | Niveau : Bac +5 (Diplômé)</h4>
           </div>
         </div>
 
         <!-- ENEDIS 2 -->
-        <div class="tl-item tl-left type-exp">
+        <div class="tl-item tl-right type-exp">
           <div class="tl-content">
-            <span class="tl-date date-exp">Septembre 2021 - Novembre 2022</span>
+            <span class="tl-date date-exp">Sept 2021 - Nov 2022</span>
             <h2>Pilote de Projet SI et Data Analyst</h2>
             <h4>Enedis</h4>
             <ul>
-              <li><strong>Gestion de Projet :</strong> Mise en place d’un processus national couvrant 80 applications, aligné sur les normes DSI (amélioration continue).</li>
-              <li><strong>Maquettage :</strong> Validation des prototypes du client et itération (Figma/Miro).</li>
-              <li><strong>Tests :</strong> Élaboration d'une matrice de tests avec les intervenants métier.</li>
-              <li><strong>Data Visualisation :</strong> Utilisation de PowerBI et JasperSoft.</li>
-              <li><strong>Data Virtualisation :</strong> Intégration de multiples vues avec Denodo.</li>
-              <li><strong>Animateur 3D :</strong> Mise en place d’un processus d’impression 3D local.</li>
+              <li><strong>Gestion :</strong> Processus national sur 80 applications.</li>
+              <li><strong>Data Visualisation :</strong> PowerBI, JasperSoft.</li>
+              <li><strong>Data Virtualisation :</strong> Denodo.</li>
+              <li><strong>Animateur 3D :</strong> Processus d’impression 3D local.</li>
             </ul>
           </div>
         </div>
 
         <!-- CESI BAC+4 -->
-        <div class="tl-item tl-right type-edu">
+        <div class="tl-item tl-left type-edu">
           <div class="tl-content">
             <span class="tl-date date-edu">2019 - 2021</span>
             <h2>Responsable en Ingénierie des Logiciels</h2>
-            <h4>École : CESI | Niveau : Bac +4</h4>
-            <p><strong>Status :</strong> Diplômé</p>
+            <h4>École : CESI | Niveau : Bac +4 (Diplômé)</h4>
           </div>
         </div>
 
         <!-- ENEDIS 1 -->
-        <div class="tl-item tl-left type-exp">
+        <div class="tl-item tl-right type-exp">
           <div class="tl-content">
-            <span class="tl-date date-exp">Septembre 2019 - Août 2021</span>
+            <span class="tl-date date-exp">Sept 2019 - Août 2021</span>
             <h2>Pilote de Projet SI et Développeur Web</h2>
             <h4>Enedis</h4>
             <ul>
-              <li><strong>Gestion de Projet Agile :</strong> Rédaction CDC, Design Sprint (12 Tâches, 23 Commentaires, 100% fini), tests utilisateurs. Processus itératif de la création de maquettes.</li>
-              <li><strong>Gains eConvention :</strong> -200 K€/DR et -0.4 ETP/DR sur 1 an (25 DR). Baisse des frais de justice, automatisation des tâches.</li>
-              <li><strong>Comité :</strong> Participation aux comités numériques et d'innovation.</li>
-              <li><strong>Développeur web :</strong> Application "Aide à la priorisation des investissements" (CheckMarx, MariaDB, PHP, DataTable, Chart JS).</li>
-              <li><strong>Animateur LARO :</strong> Formation des nouveaux développeurs, réunions mensuelles.</li>
+              <li><strong>App eConvention :</strong> -200 K€/DR et -0.4 ETP/DR sur 1 an (25 DR).</li>
+              <li><strong>Dev web :</strong> "Aide à la priorisation des investissements" (MariaDB, PHP, Chart JS).</li>
+              <li><strong>Animateur LARO :</strong> Formation devs, réunions mensuelles.</li>
             </ul>
           </div>
         </div>
 
-        <!-- EDEMOCRATIE -->
-        <div class="tl-item tl-right type-exp">
+        <!-- EDEMOCRATIE (AVEC LE LIEN DU VIEUX PORTFOLIO) -->
+        <div class="tl-item tl-left type-exp">
           <div class="tl-content">
             <span class="tl-date date-exp">Décembre 2018 - Avril 2019</span>
             <h2>Mobile Developer</h2>
             <h4>eDemocratie</h4>
-            <p>Développement d'une application mobile en utilisant le modèle MVP avec les méthodologies SCRUM et KANBAN. Utilisation d'Ionic 1 et 4. Gestion du contrôle de version avec Sourcetree, Bitbucket et GitLab. Travail d'équipe avec un graphiste.</p>
+            <p>Modèle MVP en SCRUM/KANBAN. Utilisation d'Ionic 1 et 4. Collaboration graphiste.</p>
+            
+            <div class="project-visual">
+              <div class="visual-img" style="background-image: url('img/transition.png');"></div>
+              <div class="visual-code">
+<pre><code>// Ionic 4 Mobile App
+import { Component } from '@angular/core';
+
+@Component({
+  selector: 'app-home',
+  templateUrl: 'home.page.html'
+})
+export class HomePage {
+  constructor() {}
+}</code></pre>
+              </div>
+            </div>
+            <a href="https://drive.google.com/open?id=1hfJwg6Ln_20MDhIGIv4ts8B7Hy0wzGW9" target="_blank" class="github-link"><i class="fas fa-external-link-alt"></i> Présentation Transition Web[cite: 4]</a>
           </div>
         </div>
 
         <!-- BTS SIO -->
-        <div class="tl-item tl-left type-edu">
+        <div class="tl-item tl-right type-edu">
           <div class="tl-content">
             <span class="tl-date date-edu">2018 - 2019</span>
             <h2>BTS SIO - SLAM</h2>
-            <h4>École : Lycée Mermoz | Niveau : Bac +2</h4>
-            <p><strong>Status :</strong> Diplômé</p>
+            <h4>École : Lycée Mermoz | Niveau : Bac +2 (Diplômé)</h4>
+          </div>
+        </div>
+
+        <!-- PROJETS BTS (NESTI & LECTEUR AUDIO) -->
+        <div class="tl-item tl-left type-proj">
+          <div class="tl-content">
+            <span class="tl-date date-proj">Projets BTS SIO</span>
+            <h2>Projets Nesti & Lecteur Web</h2>
+            <h4>JAVA / PHP / AJAX / JS</h4>
+            
+            <p><strong>Client Lourd JAVA :</strong></p>
+            <div class="project-visual" style="height: 150px;">
+              <div class="visual-img" style="background-image: url('img/nestilourd.png');"></div>
+              <div class="visual-code">
+<pre><code>// Client Lourd JAVA
+public class NestiApp {
+    public static void main(String[] args) {
+        new MainWindow().setVisible(true);
+    }
+}</code></pre>
+              </div>
+            </div>
+            <a href="https://drive.google.com/open?id=1PIOg7UOQUK1WIoWjcuXLIvQJlK-WWLVO" target="_blank" class="github-link"><i class="fas fa-external-link-alt"></i> Projet Lourd[cite: 4]</a>
+
+            <p style="margin-top: 15px;"><strong>Client Léger PHP & AJAX :</strong></p>
+            <div class="project-visual" style="height: 150px;">
+              <div class="visual-img" style="background-image: url('img/nestileger.png');"></div>
+              <div class="visual-code">
+<pre><code>&lt;?php
+// Client léger PHP
+require_once 'db.php';
+$req = $pdo->query("SELECT * FROM produits");
+?&gt;</code></pre>
+              </div>
+            </div>
+            <a href="https://drive.google.com/open?id=1BscuqiOTKjJHyVKR7bugz3HKSs6w5SqD" target="_blank" class="github-link"><i class="fas fa-external-link-alt"></i> Projet Léger[cite: 4]</a>
+            
+            <a href="https://lecteurvideo.000webhostapp.com/" target="_blank" class="github-link" style="display: block; margin-top: 15px;"><i class="fas fa-external-link-alt"></i> Projet Lecteur Audio JS[cite: 4]</a>
+          </div>
+        </div>
+
+        <!-- VEILLE TECH (BTS) -->
+        <div class="tl-item tl-right type-proj">
+          <div class="tl-content">
+            <span class="tl-date date-proj">Veille Technologique</span>
+            <h2>Présentations & Recherches</h2>
+            <h4>BTS SIO</h4>
+            <div class="veille-links">
+              <a href="https://drive.google.com/open?id=1KCX3__D6PyC8y2to740Uko7W7rO9290q" target="_blank" class="github-link"><i class="fas fa-file-powerpoint"></i> Huawei Ban (vs Trump)[cite: 4]</a>
+              <a href="https://drive.google.com/open?id=1I_RMxIUJIZVOcCztmYfiGHofhDpO3Pgj" target="_blank" class="github-link"><i class="fas fa-file-powerpoint"></i> Google Duplex (I/O 2018)[cite: 4]</a>
+              <a href="https://drive.google.com/open?id=1zUpRysziKpxBOYRVwIOk7BdcsPdczhXi" target="_blank" class="github-link"><i class="fas fa-file-powerpoint"></i> Smartphones Pliables[cite: 4]</a>
+            </div>
           </div>
         </div>
 
         <!-- LICENCE FDS -->
-        <div class="tl-item tl-right type-edu">
+        <div class="tl-item tl-left type-edu">
           <div class="tl-content">
             <span class="tl-date date-edu">2016 - 2018</span>
             <h2>Licence Informatique</h2>
-            <h4>École : Faculté des Sciences (FDS) | Niveau : Bac +1</h4>
-            <p><strong>Status :</strong> Partiel</p>
+            <h4>École : Faculté des Sciences (FDS) | Niveau : Bac +1 (Partiel)</h4>
+          </div>
+        </div>
+
+        <!-- JEU 2048 (BAC/LICENCE) -->
+        <div class="tl-item tl-right type-proj">
+          <div class="tl-content">
+            <span class="tl-date date-proj">Projet d'étude</span>
+            <h2>Le jeu 2048 en Python</h2>
+            <h4>Logique / Algorithmique</h4>
+            
+            <div class="project-visual">
+              <div class="visual-img" style="background-image: url('img/2048i.png');"></div>
+              <div class="visual-code">
+<pre><code># Jeu 2048 - Python
+def spawn_number(grid):
+    empty = get_empty_cells(grid)
+    if empty:
+        r, c = random.choice(empty)
+        grid[r][c] = 2
+    return grid</code></pre>
+              </div>
+            </div>
+            <a href="https://drive.google.com/open?id=1zwnNOlI9n1oCxIBztg7QT5LuYbx-2GYC" target="_blank" class="github-link"><i class="fas fa-external-link-alt"></i> Voir le code du jeu[cite: 4]</a>
           </div>
         </div>
 
@@ -541,8 +613,7 @@ export default function Portfolio() {
           <div class="tl-content">
             <span class="tl-date date-edu">2016</span>
             <h2>BAC S - Option Informatique</h2>
-            <h4>École : Lycée Pompidou | Niveau : Bac 0</h4>
-            <p><strong>Status :</strong> Diplômé</p>
+            <h4>École : Lycée Pompidou | Niveau : Bac 0 (Diplômé)</h4>
           </div>
         </div>
 
@@ -554,14 +625,9 @@ export default function Portfolio() {
   <script>
     document.querySelectorAll('.project-visual').forEach(visual => {
       visual.addEventListener('mousemove', (e) => {
-        // On récupère les dimensions de la boite du projet
         const rect = visual.getBoundingClientRect();
-        
-        // On calcule la position X et Y de la souris à l'intérieur de la boite
         const x = e.clientX - rect.left;
         const y = e.clientY - rect.top;
-        
-        // On injecte ces coordonnées directement dans le CSS
         visual.style.setProperty('--mouse-x', `${x}px`);
         visual.style.setProperty('--mouse-y', `${y}px`);
       });
