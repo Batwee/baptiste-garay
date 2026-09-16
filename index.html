@@ -3,635 +3,680 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Baptiste GARAY — Portfolio & CV</title>
+  <title>Baptiste GARAY — Portfolio Apple Style</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
   
   <style>
-    /* --- VARIABLES & RESET --- */
+    /* --- STYLE APPLE : VARIABLES & RESET --- */
     :root {
-      --bg-dark: #09090b;
-      --bg-card: #18181b;
-      --text-main: #f4f4f5;
-      --text-muted: #a1a1aa;
-      --primary: #38bdf8;
-      --accent-exp: #f43f5e;
-      --accent-edu: #10b981;
-      --accent-proj: #a855f7;
-      --border: #27272a;
-      --font-ui: 'Outfit', sans-serif;
+      --bg-page: #f5f5f7;
+      --bg-card: #ffffff;
+      --text-main: #1d1d1f;
+      --text-muted: #86868b;
+      --accent: #007aff;
+      --accent-gradient: linear-gradient(135deg, #007aff, #5856d6, #ff2d55);
+      --border: #d2d2d7;
+      
+      /* Typographie Apple System */
+      --font-ui: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
       --font-code: 'Fira Code', monospace;
     }
 
     * { margin: 0; padding: 0; box-sizing: border-box; }
     
     body {
-      background-color: var(--bg-dark);
+      background-color: var(--bg-page);
       color: var(--text-main);
       font-family: var(--font-ui);
-      line-height: 1.6;
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
       overflow-x: hidden;
     }
 
-    .container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
+    .container { max-width: 1000px; margin: 0 auto; padding: 0 20px; }
+
+    /* --- EFFET FLUIDE & RESSORT (COMMUN AU HEADER ET AUX PROJETS) --- */
+    .fluid-wrapper {
+      position: relative;
+      overflow: hidden;
+      /* Variables CSS mises à jour par JS */
+      --mask-x: 50%;
+      --mask-y: 50%;
+    }
+
+    .fluid-front {
+      position: relative;
+      z-index: 1;
+      transition: filter 0.5s ease, transform 0.5s ease;
+      background: var(--bg-card);
+    }
+
+    .fluid-back {
+      position: absolute;
+      top: 0; left: 0; width: 100%; height: 100%;
+      z-index: 2;
+      background: #1d1d1f;
+      color: #f5f5f7;
+      
+      /* Le masque radial qui crée l'effet lampe torche */
+      -webkit-mask-image: radial-gradient(circle 200px at var(--mask-x) var(--mask-y), black 10%, transparent 80%);
+      mask-image: radial-gradient(circle 200px at var(--mask-x) var(--mask-y), black 10%, transparent 80%);
+      
+      opacity: 0;
+      transition: opacity 0.5s ease;
+      pointer-events: none; /* Laisse passer la souris */
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 30px;
+    }
+
+    /* Le beau dégradé animé en arrière-plan du code */
+    .fluid-back::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: var(--accent-gradient);
+      opacity: 0.15;
+      z-index: -1;
+    }
+
+    .fluid-code {
+      font-family: var(--font-code);
+      font-size: 0.85rem;
+      color: #5ac8fa;
+      width: 100%;
+      white-space: pre-wrap;
+    }
+
+    .fluid-wrapper:hover .fluid-back { opacity: 1; }
+    .fluid-wrapper:hover .fluid-front { filter: grayscale(50%) blur(2px); transform: scale(0.98); }
 
     /* --- EN-TÊTE / PROFIL --- */
     header {
-      padding: 80px 0 40px;
+      margin: 40px auto;
+      border-radius: 30px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.05);
       text-align: center;
-      border-bottom: 1px solid var(--border);
-      background: radial-gradient(circle at top, rgba(56, 189, 248, 0.1) 0%, var(--bg-dark) 70%);
     }
 
-    h1 { font-size: 3.5rem; font-weight: 800; color: var(--primary); margin-bottom: 10px; }
-    .subtitle { font-size: 1.2rem; color: var(--text-muted); font-family: var(--font-code); margin-bottom: 20px; }
+    .header-front {
+      padding: 60px 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .avatar {
+      width: 130px;
+      height: 130px;
+      border-radius: 50%;
+      object-fit: cover;
+      margin-bottom: 20px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+      border: 3px solid #fff;
+    }
+
+    h1 { font-size: 3rem; font-weight: 700; letter-spacing: -0.02em; margin-bottom: 8px; }
+    .subtitle { font-size: 1.2rem; color: var(--text-muted); font-weight: 400; margin-bottom: 25px; }
     
     .contact-info {
       display: flex;
       justify-content: center;
       flex-wrap: wrap;
-      gap: 20px;
-      margin-bottom: 40px;
+      gap: 15px;
     }
     .contact-info a, .contact-info span {
+      background: var(--bg-page);
+      padding: 8px 16px;
+      border-radius: 20px;
       color: var(--text-main);
       text-decoration: none;
+      font-size: 0.9rem;
+      font-weight: 500;
       display: flex;
       align-items: center;
       gap: 8px;
-      font-size: 0.95rem;
+      transition: all 0.2s;
     }
-    .contact-info a:hover { color: var(--primary); }
+    .contact-info a:hover { background: var(--border); }
 
     /* --- COMPÉTENCES & INTÉRÊTS --- */
     .dashboard {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
       gap: 20px;
       margin-bottom: 60px;
     }
     .dash-card {
       background: var(--bg-card);
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 20px;
+      border-radius: 24px;
+      padding: 30px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.04);
     }
-    .dash-card h3 { font-size: 1.2rem; margin-bottom: 15px; display: flex; align-items: center; gap: 10px; color: var(--primary); }
+    .dash-card h3 { font-size: 1.3rem; font-weight: 600; margin-bottom: 20px; display: flex; align-items: center; gap: 10px; }
     
-    .skill-block { margin-bottom: 15px; }
-    .skill-block span.cat { display: block; font-family: var(--font-code); color: var(--text-muted); font-size: 0.8rem; margin-bottom: 5px; }
-    .tags { display: flex; flex-wrap: wrap; gap: 6px; }
-    .tag { background: #27272a; padding: 4px 10px; border-radius: 6px; font-size: 0.85rem; font-weight: 600; }
+    .skill-block { margin-bottom: 20px; }
+    .skill-block span.cat { display: block; font-size: 0.8rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 8px; font-weight: 600; }
+    .tags { display: flex; flex-wrap: wrap; gap: 8px; }
+    .tag { background: var(--bg-page); color: var(--text-main); padding: 6px 12px; border-radius: 8px; font-size: 0.85rem; font-weight: 500; }
     
     ul.interests { list-style: none; }
-    ul.interests li { margin-bottom: 10px; font-size: 0.9rem; color: var(--text-muted); display: flex; align-items: center; gap: 10px; }
-    ul.interests li i { color: var(--primary); width: 20px; }
+    ul.interests li { margin-bottom: 12px; font-size: 0.95rem; color: var(--text-main); display: flex; align-items: center; gap: 12px; }
+    ul.interests li i { color: var(--accent); font-size: 1.1rem; width: 20px; text-align: center; }
 
-    /* --- TIMELINE VERTICALE --- */
-    .timeline-section { padding: 60px 0; }
-    .timeline-title { text-align: center; font-size: 2.5rem; margin-bottom: 60px; }
+    /* --- TIMELINE VERTICALE APPLE STYLE --- */
+    .timeline-title { text-align: center; font-size: 2.2rem; font-weight: 700; margin-bottom: 50px; letter-spacing: -0.02em; }
     
     .timeline {
       position: relative;
-      max-width: 1000px;
-      margin: 0 auto;
+      margin: 0 auto 80px;
     }
-    /* La ligne centrale */
+    /* Ligne très fine et discrète */
     .timeline::after {
       content: '';
       position: absolute;
-      width: 4px;
+      width: 2px;
       background: var(--border);
-      top: 0;
-      bottom: 0;
-      left: 50%;
-      margin-left: -2px;
-      border-radius: 2px;
+      top: 0; bottom: 0; left: 50%;
+      margin-left: -1px;
     }
 
     .tl-item {
-      padding: 10px 40px;
+      padding: 20px 40px;
       position: relative;
-      background-color: inherit;
       width: 50%;
     }
+    /* Le petit point central (Node) */
     .tl-item::after {
       content: '';
       position: absolute;
-      width: 20px;
-      height: 20px;
-      right: -10px;
-      background-color: var(--bg-dark);
-      border: 4px solid var(--primary);
-      top: 25px;
-      border-radius: 50%;
+      width: 14px; height: 14px;
+      background-color: var(--bg-card);
+      border: 3px solid var(--accent);
+      top: 50px; border-radius: 50%;
       z-index: 1;
+      box-shadow: 0 0 0 4px var(--bg-page);
     }
     .tl-left { left: 0; }
     .tl-right { left: 50%; }
-    .tl-right::after { left: -10px; }
+    .tl-left::after { right: -8px; }
+    .tl-right::after { left: -7px; }
 
-    /* Couleurs selon type (Exp, Edu, Proj) */
-    .type-exp::after { border-color: var(--accent-exp); }
-    .type-edu::after { border-color: var(--accent-edu); }
-    .type-proj::after { border-color: var(--accent-proj); }
+    .type-exp::after { border-color: #ff2d55; }
+    .type-edu::after { border-color: #34c759; }
 
     .tl-content {
-      padding: 25px;
       background: var(--bg-card);
-      position: relative;
-      border-radius: 12px;
-      border: 1px solid var(--border);
-      transition: border-color 0.3s;
+      padding: 30px;
+      border-radius: 24px;
+      box-shadow: 0 8px 30px rgba(0,0,0,0.04);
     }
-    .tl-content:hover { border-color: var(--primary); }
 
     .tl-date {
       display: inline-block;
-      font-family: var(--font-code);
       font-size: 0.8rem;
-      padding: 4px 12px;
-      border-radius: 20px;
-      margin-bottom: 10px;
       font-weight: 600;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 12px;
     }
-    .date-exp { background: rgba(244, 63, 94, 0.1); color: var(--accent-exp); }
-    .date-edu { background: rgba(16, 185, 129, 0.1); color: var(--accent-edu); }
-    .date-proj { background: rgba(168, 85, 247, 0.1); color: var(--accent-proj); }
 
-    .tl-content h2 { font-size: 1.3rem; margin-bottom: 5px; }
-    .tl-content h4 { font-size: 1rem; color: var(--text-muted); margin-bottom: 15px; font-weight: 400; }
-    .tl-content p, .tl-content ul { font-size: 0.95rem; color: #cbd5e1; margin-bottom: 10px; }
+    .tl-content h2 { font-size: 1.4rem; font-weight: 700; margin-bottom: 4px; letter-spacing: -0.01em; }
+    .tl-content h4 { font-size: 1.05rem; color: var(--text-muted); margin-bottom: 15px; font-weight: 400; }
+    .tl-content p, .tl-content ul { font-size: 0.95rem; color: #333; margin-bottom: 12px; }
     .tl-content ul { padding-left: 20px; }
 
-    /* --- EFFET WOW : REVEAL "LIQUIDE/MAGIQUE" SOUS L'IMAGE --- */
-    .project-visual {
-      position: relative;
-      width: 100%;
-      height: 220px;
-      margin-top: 20px;
-      border-radius: 8px;
-      overflow: hidden;
-      border: 1px solid var(--border);
-      cursor: crosshair;
-      
-      /* Variables par défaut pour la position de la souris */
-      --mouse-x: 50%;
-      --mouse-y: 50%;
-    }
-    
-    /* L'image de présentation (en dessous par défaut) */
-    .visual-img {
-      position: absolute;
-      top: 0; left: 0; width: 100%; height: 100%;
-      background-size: cover;
-      background-position: center;
-      z-index: 1;
-      transition: filter 0.4s ease, transform 0.4s ease;
-    }
-    
-    /* Le code source (qui se superpose) */
-    .visual-code {
-      position: absolute;
-      top: 0; left: 0; width: 100%; height: 100%;
-      background: rgba(13, 17, 23, 0.95);
-      padding: 15px;
-      font-family: var(--font-code);
-      font-size: 0.75rem;
-      color: #56b6c2;
-      z-index: 2;
-      
-      /* Le masque radial qui suit la souris */
-      -webkit-mask-image: radial-gradient(circle 140px at var(--mouse-x) var(--mouse-y), black 20%, transparent 100%);
-      mask-image: radial-gradient(circle 140px at var(--mouse-x) var(--mouse-y), black 20%, transparent 100%);
-      
-      opacity: 0;
-      transition: opacity 0.3s ease;
-    }
-
-    .project-visual:hover .visual-img {
-      filter: brightness(0.3) blur(4px);
-      transform: scale(1.03);
-    }
-    
-    .project-visual:hover .visual-code {
-      opacity: 1;
-    }
-
+    /* Liens style Apple */
     .github-link {
       display: inline-flex;
       align-items: center;
-      gap: 8px;
-      margin-top: 15px;
-      color: var(--primary);
+      gap: 6px;
+      margin-top: 10px;
+      color: var(--accent);
       text-decoration: none;
-      font-family: var(--font-code);
-      font-size: 0.9rem;
+      font-weight: 500;
+      font-size: 0.95rem;
     }
     .github-link:hover { text-decoration: underline; }
-    
-    .veille-links a {
-      display: block;
-      margin-top: 10px;
+
+    /* Visuels Projets dans la Timeline */
+    .project-visual {
+      border-radius: 16px;
+      height: 200px;
+      margin-top: 20px;
+      box-shadow: inset 0 0 0 1px rgba(0,0,0,0.1);
+    }
+    .project-visual .fluid-front {
+      height: 100%;
+      background-size: cover;
+      background-position: center;
+      border-radius: 16px;
     }
 
-    /* --- RESPONSIVE TIMELINE --- */
+    /* --- RESPONSIVE --- */
     @media screen and (max-width: 800px) {
-      .timeline::after { left: 31px; }
+      .timeline::after { left: 30px; }
       .tl-item { width: 100%; padding-left: 70px; padding-right: 0; }
       .tl-right { left: 0; }
-      .tl-left::after, .tl-right::after { left: 21px; }
+      .tl-left::after, .tl-right::after { left: 23px; }
     }
   </style>
 </head>
 <body>
 
-  <header>
-    <div class="container">
-      <h1>Baptiste GARAY</h1>
-      <p class="subtitle">&lt; Chef de Projet / Développeur / Passionné Tech /&gt;</p>
+  <div class="container">
+    
+    <!-- HEADER AVEC EFFET FLUIDE -->
+    <header class="fluid-wrapper">
+      <div class="fluid-front header-front">
+        <img src="img/avatar.jpg" alt="Baptiste Garay" class="avatar">
+        <h1>Baptiste GARAY</h1>
+        <p class="subtitle">Chef de Projet / Développeur / Passionné Tech</p>
+        
+        <div class="contact-info">
+          <span><i class="fas fa-map-marker-alt"></i> Montpellier & Vendargues</span>
+          <a href="mailto:baptiste.garay@gmail.com"><i class="fas fa-envelope"></i> baptiste.garay@gmail.com</a>
+          <a href="tel:0602312419"><i class="fas fa-phone"></i> 06 02 31 24 19</a>
+          <a href="https://linkedin.com/in/baptistegaray" target="_blank"><i class="fab fa-linkedin"></i> LinkedIn</a>
+        </div>
+      </div>
       
-      <div class="contact-info">
-        <span><i class="fas fa-map-marker-alt"></i> Montpellier & Vendargues</span>
-        <a href="mailto:baptiste.garay@gmail.com"><i class="fas fa-envelope"></i> baptiste.garay@gmail.com</a>
-        <a href="tel:0602312419"><i class="fas fa-phone"></i> 06 02 31 24 19</a>
-        <a href="https://linkedin.com/in/baptistegaray" target="_blank"><i class="fab fa-linkedin"></i> /in/baptistegaray</a>
-        <a href="https://github.com/Batwee" target="_blank"><i class="fab fa-github"></i> Batwee</a>
+      <div class="fluid-back">
+        <div class="fluid-code">
+<pre><code>const profile = {
+  name: "Baptiste GARAY",
+  role: "Développeur & Chef de Projet SI",
+  location: "Vendargues, France",
+  passion: ["Code", "DIY", "3D Printing"],
+  status: "Prêt à innover"
+};
+// Hover pour révéler la source...</code></pre>
+        </div>
+      </div>
+    </header>
+
+    <!-- DASHBOARD -->
+    <div class="dashboard">
+      <div class="dash-card">
+        <h3><i class="fas fa-code"></i> Stack Technique</h3>
+        <div class="skill-block">
+          <span class="cat">Langages</span>
+          <div class="tags">
+            <span class="tag">SQL</span><span class="tag">JS</span><span class="tag">Java</span>
+            <span class="tag">Python</span><span class="tag">Angular</span><span class="tag">PHP</span>
+          </div>
+        </div>
+        <div class="skill-block">
+          <span class="cat">Frameworks</span>
+          <div class="tags">
+            <span class="tag">React</span><span class="tag">Bootstrap</span>
+          </div>
+        </div>
+        <div class="skill-block">
+          <span class="cat">DevOps</span>
+          <div class="tags">
+            <span class="tag">Docker</span><span class="tag">Jenkins</span><span class="tag">Checkmarx</span>
+          </div>
+        </div>
       </div>
 
-      <!-- DASHBOARD : SKILLS & INTÉRÊTS -->
-      <div class="dashboard">
-        <div class="dash-card">
-          <h3><i class="fas fa-code"></i> Stack Technique</h3>
-          <div class="skill-block">
-            <span class="cat">langage=""</span>
-            <div class="tags">
-              <span class="tag">SQL</span><span class="tag">JS</span><span class="tag">Java</span>
-              <span class="tag">Python</span><span class="tag">Angular</span><span class="tag">PHP</span>
-            </div>
-          </div>
-          <div class="skill-block">
-            <span class="cat">framework=""</span>
-            <div class="tags">
-              <span class="tag">React</span><span class="tag">Bootstrap</span><span class="tag">Angular</span>
-            </div>
-          </div>
-          <div class="skill-block">
-            <span class="cat">devops=""</span>
-            <div class="tags">
-              <span class="tag">Docker</span><span class="tag">Jenkins (CI/CD)</span><span class="tag">Checkmarx</span>
-            </div>
+      <div class="dash-card">
+        <h3><i class="fas fa-layer-group"></i> Méthodes & Design</h3>
+        <div class="skill-block">
+          <span class="cat">Management</span>
+          <div class="tags">
+            <span class="tag">SCRUM</span><span class="tag">AMDEC</span><span class="tag">Gantt</span><span class="tag">KANBAN</span>
           </div>
         </div>
-
-        <div class="dash-card">
-          <h3><i class="fas fa-tasks"></i> Méthodes & Design</h3>
-          <div class="skill-block">
-            <span class="cat">management=""</span>
-            <div class="tags">
-              <span class="tag">SCRUM</span><span class="tag">AMDEC</span><span class="tag">Gantt</span><span class="tag">KANBAN</span>
-            </div>
-          </div>
-          <div class="skill-block">
-            <span class="cat">design=""</span>
-            <div class="tags">
-              <span class="tag">Figma</span><span class="tag">Miro</span><span class="tag">Fusion360</span><span class="tag">Cura</span>
-            </div>
+        <div class="skill-block">
+          <span class="cat">Design 3D & UI</span>
+          <div class="tags">
+            <span class="tag">Figma</span><span class="tag">Miro</span><span class="tag">Fusion360</span><span class="tag">Cura</span>
           </div>
         </div>
+      </div>
 
-        <div class="dash-card">
-          <h3><i class="fas fa-heart"></i> Intérêts</h3>
-          <ul class="interests">
-            <li><i class="fas fa-satellite-dish"></i> Nouvelles Tech (KEYNOTES, Youtubeur News)</li>
-            <li><i class="fas fa-skating"></i> Roller Rando tous les lundis</li>
-            <li><i class="fas fa-hammer"></i> DIY</li>
-            <li><i class="fas fa-cube"></i> Impression 3D</li>
+      <div class="dash-card">
+        <h3><i class="fas fa-compass"></i> Intérêts</h3>
+        <ul class="interests">
+          <li><i class="fas fa-bolt"></i> Nouvelles Tech & Keynotes</li>
+          <li><i class="fas fa-route"></i> Roller Rando (Lundis)</li>
+          <li><i class="fas fa-hammer"></i> DIY & Création manuelle</li>
+          <li><i class="fas fa-cube"></i> Impression 3D</li>
+        </ul>
+      </div>
+    </div>
+
+    <h2 class="timeline-title">Parcours & Projets</h2>
+    
+    <div class="timeline">
+
+      <!-- INFOWEE -->
+      <div class="tl-item tl-left type-exp">
+        <div class="tl-content">
+          <span class="tl-date">Jan 2023 - 2026</span>
+          <h2>InfoWee</h2>
+          <h4>Micro-Entreprise et Formateur (Vendargues)</h4>
+          <ul>
+            <li><strong>Dépannage, Domotique, IA.</strong> Création de la fiche Google en 2025 (activité commencée au collège).</li>
+            <li>Professeur d’informatique au Lycée Honoré de Balzac.</li>
+            <li>Formateur en Programmation Ynov Campus Montpellier.</li>
+            <li>Création de sites PHP et d’une app finance en React.</li>
           </ul>
         </div>
       </div>
-    </div>
-  </header>
 
-  <section class="timeline-section">
-    <div class="container">
-      <h2 class="timeline-title">Parcours & Projets</h2>
-      
-      <div class="timeline">
-
-        <!-- INFOWEE -->
-        <div class="tl-item tl-left type-exp">
-          <div class="tl-content">
-            <span class="tl-date date-exp">Janvier 2023 - 2026</span>
-            <h2>InfoWee - Baptiste GARAY</h2>
-            <h4>Micro-Entreprise et Formateur (Vendargues/Montpellier)</h4>
-            <ul>
-              <li><strong>Maintenance Informatique, Domotique, IA.</strong></li>
-              <li>Création de la fiche Google en <strong>2025</strong>, activité de dépannage effectuée depuis le collège (avant 2016).</li>
-              <li>Professeur d’informatique au Lycée Honoré de Balzac.</li>
-              <li>Formateur Informatique en Programmation Ynov Campus Montpellier.</li>
-              <li>Création de sites PHP et d’une application de finance en React.</li>
-            </ul>
-          </div>
+      <!-- WINDOWS 11 -->
+      <div class="tl-item tl-right type-proj">
+        <div class="tl-content">
+          <span class="tl-date">Fév 2026</span>
+          <h2>Forcer le passage à Windows 11</h2>
+          <h4>Windows / Registre / Admin système</h4>
+          <p>Solution pour faciliter la migration vers Windows 11 de PC non compatibles. Projet destiné aux parcs scolaires.</p>
+          <a href="https://forge.example.com/forcer-le-passage-a-win-11" class="github-link">Voir sur Forge <i class="fas fa-arrow-right"></i></a>
         </div>
+      </div>
 
-        <!-- WINDOWS 11 -->
-        <div class="tl-item tl-right type-proj">
-          <div class="tl-content">
-            <span class="tl-date date-proj">Février 2026</span>
-            <h2>Forcer le passage à Windows 11</h2>
-            <h4>Windows / Registre / Administration système</h4>
-            <p>Solution permettant de faciliter la migration vers Windows 11 de PC existants non officiellement compatibles (registre). Destiné aux parcs informatiques scolaires.</p>
-            <a href="https://forge.example.com/forcer-le-passage-a-win-11" class="github-link"><i class="fas fa-link"></i> Forge — forcer-le-passage-a-win-11</a>
-          </div>
-        </div>
-
-        <!-- UPDATEVOTES -->
-        <div class="tl-item tl-left type-proj">
-          <div class="tl-content">
-            <span class="tl-date date-proj">Projet GitHub</span>
-            <h2>UpdateVotes</h2>
-            <h4>JavaScript / Node.js / GitHub Actions</h4>
-            <p>Pipeline automatisé de nettoyage de données de scrutins de l’Assemblée nationale.</p>
-            
-            <div class="project-visual">
-              <div class="visual-img" style="background-image: url('https://picsum.photos/seed/votes/600/400');"></div>
-              <div class="visual-code">
-<pre><code>// Script UpdateVotes
-const fs = require('fs');
-const actions = require('@actions/core');
-
-async function cleanData() {
-  const raw = await fetch('api/assemblee');
+      <!-- UPDATEVOTES (EFFET FLUIDE) -->
+      <div class="tl-item tl-left type-proj">
+        <div class="tl-content">
+          <span class="tl-date">Projet GitHub</span>
+          <h2>UpdateVotes</h2>
+          <h4>JavaScript / Node.js / GitHub Actions</h4>
+          <p>Pipeline automatisé de nettoyage de données de scrutins de l’Assemblée nationale.</p>
+          
+          <div class="fluid-wrapper project-visual">
+            <div class="fluid-front" style="background-image: url('https://picsum.photos/seed/votes/600/400');"></div>
+            <div class="fluid-back">
+              <div class="fluid-code">
+<pre><code>async function cleanData() {
+  const raw = await fetch('api');
   const json = await raw.json();
   return json.map(v => ({ id: v.id }));
 }</code></pre>
               </div>
             </div>
-            
-            <a href="https://github.com/Batwee/updatevotes" class="github-link"><i class="fab fa-github"></i> Batwee/updatevotes</a>
           </div>
+          <a href="https://github.com/Batwee/updatevotes" class="github-link">Repo GitHub <i class="fas fa-arrow-right"></i></a>
         </div>
+      </div>
 
-        <!-- INCENDIES FRANCE -->
-        <div class="tl-item tl-right type-proj">
-          <div class="tl-content">
-            <span class="tl-date date-proj">Projet GitHub</span>
-            <h2>Incendies France</h2>
-            <h4>Python / Streamlit / Folium</h4>
-            <p>Application cartographique interactive de suivi des incendies en France.</p>
-            
-            <div class="project-visual">
-              <div class="visual-img" style="background-image: url('https://picsum.photos/seed/fire/600/400');"></div>
-              <div class="visual-code">
-<pre><code># Streamlit App
-import streamlit as st
-import folium
-
-def init_map():
+      <!-- INCENDIES FRANCE (EFFET FLUIDE) -->
+      <div class="tl-item tl-right type-proj">
+        <div class="tl-content">
+          <span class="tl-date">Projet GitHub</span>
+          <h2>Incendies France</h2>
+          <h4>Python / Streamlit / Folium</h4>
+          <p>Application cartographique de suivi des incendies en France.</p>
+          
+          <div class="fluid-wrapper project-visual">
+            <div class="fluid-front" style="background-image: url('https://picsum.photos/seed/fire/600/400');"></div>
+            <div class="fluid-back">
+              <div class="fluid-code">
+<pre><code>def init_map():
     m = folium.Map(location=[46, 2])
     folium.Marker([43.6, 3.8]).add_to(m)
     return m</code></pre>
               </div>
             </div>
-
-            <a href="https://github.com/Batwee/incendies-france" class="github-link"><i class="fab fa-github"></i> Batwee/incendies-france</a>
           </div>
+          <a href="https://github.com/Batwee/incendies-france" class="github-link">Repo GitHub <i class="fas fa-arrow-right"></i></a>
         </div>
+      </div>
 
-        <!-- WEEINVEST -->
-        <div class="tl-item tl-left type-proj">
-          <div class="tl-content">
-            <span class="tl-date date-proj">Projet GitHub</span>
-            <h2>WeeInvest</h2>
-            <h4>React Native / Supabase / API</h4>
-            <p>App mobile de suivi de portefeuille et d’analyse financière avec dataviz.</p>
-            
-            <div class="project-visual">
-              <div class="visual-img" style="background-image: url('https://picsum.photos/seed/invest/600/400');"></div>
-              <div class="visual-code">
-<pre><code>// React Native Component
-import { supabase } from './lib/supabase'
-
-export default function Portfolio() {
-  const [data, setData] = useState([])
+      <!-- WEEINVEST (EFFET FLUIDE) -->
+      <div class="tl-item tl-left type-proj">
+        <div class="tl-content">
+          <span class="tl-date">Projet GitHub</span>
+          <h2>WeeInvest</h2>
+          <h4>React Native / Supabase</h4>
+          <p>App mobile de suivi de portefeuille et d’analyse financière.</p>
+          
+          <div class="fluid-wrapper project-visual">
+            <div class="fluid-front" style="background-image: url('https://picsum.photos/seed/invest/600/400');"></div>
+            <div class="fluid-back">
+              <div class="fluid-code">
+<pre><code>export default function Portfolio() {
   useEffect(() => {
-    supabase.from('allocations').select('*')
+    supabase.from('allocations')
   }, [])
 }</code></pre>
               </div>
             </div>
-
-            <a href="https://github.com/Batwee/weeinvest" class="github-link"><i class="fab fa-github"></i> Batwee/weeinvest</a>
           </div>
+          <a href="https://github.com/Batwee/weeinvest" class="github-link">Repo GitHub <i class="fas fa-arrow-right"></i></a>
         </div>
-        
-        <!-- ANALYSE FINANCIERE DEPUTES -->
-        <div class="tl-item tl-right type-proj">
-          <div class="tl-content">
-            <span class="tl-date date-proj">Projets GitHub Divers</span>
-            <h2>Data publique & Outils</h2>
-            <ul>
-              <li><strong>Analyse HATVP :</strong> Traitement de données publiques. <a href="https://github.com/Batwee/analyse-financiere-deputee" class="github-link">Repo</a></li>
-              <li><strong>Election :</strong> Visualisation électorale. <a href="https://github.com/Batwee/election" class="github-link">Repo</a></li>
-              <li><strong>Diskwee :</strong> Récupération PhotoRec. <a href="https://github.com/Batwee/diskwee" class="github-link">Repo</a></li>
-            </ul>
-          </div>
-        </div>
-
-        <!-- CESI BAC+5 -->
-        <div class="tl-item tl-left type-edu">
-          <div class="tl-content">
-            <span class="tl-date date-edu">2021 - 2022</span>
-            <h2>Manager en Systèmes d'Information</h2>
-            <h4>École : CESI | Niveau : Bac +5 (Diplômé)</h4>
-          </div>
-        </div>
-
-        <!-- ENEDIS 2 -->
-        <div class="tl-item tl-right type-exp">
-          <div class="tl-content">
-            <span class="tl-date date-exp">Sept 2021 - Nov 2022</span>
-            <h2>Pilote de Projet SI et Data Analyst</h2>
-            <h4>Enedis</h4>
-            <ul>
-              <li><strong>Gestion :</strong> Processus national sur 80 applications.</li>
-              <li><strong>Data Visualisation :</strong> PowerBI, JasperSoft.</li>
-              <li><strong>Data Virtualisation :</strong> Denodo.</li>
-              <li><strong>Animateur 3D :</strong> Processus d’impression 3D local.</li>
-            </ul>
-          </div>
-        </div>
-
-        <!-- CESI BAC+4 -->
-        <div class="tl-item tl-left type-edu">
-          <div class="tl-content">
-            <span class="tl-date date-edu">2019 - 2021</span>
-            <h2>Responsable en Ingénierie des Logiciels</h2>
-            <h4>École : CESI | Niveau : Bac +4 (Diplômé)</h4>
-          </div>
-        </div>
-
-        <!-- ENEDIS 1 -->
-        <div class="tl-item tl-right type-exp">
-          <div class="tl-content">
-            <span class="tl-date date-exp">Sept 2019 - Août 2021</span>
-            <h2>Pilote de Projet SI et Développeur Web</h2>
-            <h4>Enedis</h4>
-            <ul>
-              <li><strong>App eConvention :</strong> -200 K€/DR et -0.4 ETP/DR sur 1 an (25 DR).</li>
-              <li><strong>Dev web :</strong> "Aide à la priorisation des investissements" (MariaDB, PHP, Chart JS).</li>
-              <li><strong>Animateur LARO :</strong> Formation devs, réunions mensuelles.</li>
-            </ul>
-          </div>
-        </div>
-
-        <!-- EDEMOCRATIE (AVEC LE LIEN DU VIEUX PORTFOLIO) -->
-        <div class="tl-item tl-left type-exp">
-          <div class="tl-content">
-            <span class="tl-date date-exp">Décembre 2018 - Avril 2019</span>
-            <h2>Mobile Developer</h2>
-            <h4>eDemocratie</h4>
-            <p>Modèle MVP en SCRUM/KANBAN. Utilisation d'Ionic 1 et 4. Collaboration graphiste.</p>
-            
-            <div class="project-visual">
-              <div class="visual-img" style="background-image: url('img/transition.png');"></div>
-              <div class="visual-code">
-<pre><code>// Ionic 4 Mobile App
-import { Component } from '@angular/core';
-
-@Component({
-  selector: 'app-home',
-  templateUrl: 'home.page.html'
-})
-export class HomePage {
-  constructor() {}
-}</code></pre>
-              </div>
-            </div>
-            <a href="https://drive.google.com/open?id=1hfJwg6Ln_20MDhIGIv4ts8B7Hy0wzGW9" target="_blank" class="github-link"><i class="fas fa-external-link-alt"></i> Présentation Transition Web[cite: 4]</a>
-          </div>
-        </div>
-
-        <!-- BTS SIO -->
-        <div class="tl-item tl-right type-edu">
-          <div class="tl-content">
-            <span class="tl-date date-edu">2018 - 2019</span>
-            <h2>BTS SIO - SLAM</h2>
-            <h4>École : Lycée Mermoz | Niveau : Bac +2 (Diplômé)</h4>
-          </div>
-        </div>
-
-        <!-- PROJETS BTS (NESTI & LECTEUR AUDIO) -->
-        <div class="tl-item tl-left type-proj">
-          <div class="tl-content">
-            <span class="tl-date date-proj">Projets BTS SIO</span>
-            <h2>Projets Nesti & Lecteur Web</h2>
-            <h4>JAVA / PHP / AJAX / JS</h4>
-            
-            <p><strong>Client Lourd JAVA :</strong></p>
-            <div class="project-visual" style="height: 150px;">
-              <div class="visual-img" style="background-image: url('img/nestilourd.png');"></div>
-              <div class="visual-code">
-<pre><code>// Client Lourd JAVA
-public class NestiApp {
-    public static void main(String[] args) {
-        new MainWindow().setVisible(true);
-    }
-}</code></pre>
-              </div>
-            </div>
-            <a href="https://drive.google.com/open?id=1PIOg7UOQUK1WIoWjcuXLIvQJlK-WWLVO" target="_blank" class="github-link"><i class="fas fa-external-link-alt"></i> Projet Lourd[cite: 4]</a>
-
-            <p style="margin-top: 15px;"><strong>Client Léger PHP & AJAX :</strong></p>
-            <div class="project-visual" style="height: 150px;">
-              <div class="visual-img" style="background-image: url('img/nestileger.png');"></div>
-              <div class="visual-code">
-<pre><code>&lt;?php
-// Client léger PHP
-require_once 'db.php';
-$req = $pdo->query("SELECT * FROM produits");
-?&gt;</code></pre>
-              </div>
-            </div>
-            <a href="https://drive.google.com/open?id=1BscuqiOTKjJHyVKR7bugz3HKSs6w5SqD" target="_blank" class="github-link"><i class="fas fa-external-link-alt"></i> Projet Léger[cite: 4]</a>
-            
-            <a href="https://lecteurvideo.000webhostapp.com/" target="_blank" class="github-link" style="display: block; margin-top: 15px;"><i class="fas fa-external-link-alt"></i> Projet Lecteur Audio JS[cite: 4]</a>
-          </div>
-        </div>
-
-        <!-- VEILLE TECH (BTS) -->
-        <div class="tl-item tl-right type-proj">
-          <div class="tl-content">
-            <span class="tl-date date-proj">Veille Technologique</span>
-            <h2>Présentations & Recherches</h2>
-            <h4>BTS SIO</h4>
-            <div class="veille-links">
-              <a href="https://drive.google.com/open?id=1KCX3__D6PyC8y2to740Uko7W7rO9290q" target="_blank" class="github-link"><i class="fas fa-file-powerpoint"></i> Huawei Ban (vs Trump)[cite: 4]</a>
-              <a href="https://drive.google.com/open?id=1I_RMxIUJIZVOcCztmYfiGHofhDpO3Pgj" target="_blank" class="github-link"><i class="fas fa-file-powerpoint"></i> Google Duplex (I/O 2018)[cite: 4]</a>
-              <a href="https://drive.google.com/open?id=1zUpRysziKpxBOYRVwIOk7BdcsPdczhXi" target="_blank" class="github-link"><i class="fas fa-file-powerpoint"></i> Smartphones Pliables[cite: 4]</a>
-            </div>
-          </div>
-        </div>
-
-        <!-- LICENCE FDS -->
-        <div class="tl-item tl-left type-edu">
-          <div class="tl-content">
-            <span class="tl-date date-edu">2016 - 2018</span>
-            <h2>Licence Informatique</h2>
-            <h4>École : Faculté des Sciences (FDS) | Niveau : Bac +1 (Partiel)</h4>
-          </div>
-        </div>
-
-        <!-- JEU 2048 (BAC/LICENCE) -->
-        <div class="tl-item tl-right type-proj">
-          <div class="tl-content">
-            <span class="tl-date date-proj">Projet d'étude</span>
-            <h2>Le jeu 2048 en Python</h2>
-            <h4>Logique / Algorithmique</h4>
-            
-            <div class="project-visual">
-              <div class="visual-img" style="background-image: url('img/2048i.png');"></div>
-              <div class="visual-code">
-<pre><code># Jeu 2048 - Python
-def spawn_number(grid):
-    empty = get_empty_cells(grid)
-    if empty:
-        r, c = random.choice(empty)
-        grid[r][c] = 2
-    return grid</code></pre>
-              </div>
-            </div>
-            <a href="https://drive.google.com/open?id=1zwnNOlI9n1oCxIBztg7QT5LuYbx-2GYC" target="_blank" class="github-link"><i class="fas fa-external-link-alt"></i> Voir le code du jeu[cite: 4]</a>
-          </div>
-        </div>
-
-        <!-- BAC S -->
-        <div class="tl-item tl-left type-edu">
-          <div class="tl-content">
-            <span class="tl-date date-edu">2016</span>
-            <h2>BAC S - Option Informatique</h2>
-            <h4>École : Lycée Pompidou | Niveau : Bac 0 (Diplômé)</h4>
-          </div>
-        </div>
-
       </div>
-    </div>
-  </section>
 
-  <!-- LE SCRIPT POUR L'EFFET "LIQUIDE MAGIQUE" -->
+      <!-- AUTRES PROJETS GITHUB -->
+      <div class="tl-item tl-right type-proj">
+        <div class="tl-content">
+          <span class="tl-date">Projets Open Source</span>
+          <h2>Data & Outils Divers</h2>
+          <ul>
+            <li><strong>Analyse HATVP :</strong> Visualisation données. <a href="https://github.com/Batwee/analyse-financiere-deputee" class="github-link">Lien</a></li>
+            <li><strong>Election :</strong> App Streamlit. <a href="https://github.com/Batwee/election" class="github-link">Lien</a></li>
+            <li><strong>Diskwee :</strong> Récupération PhotoRec. <a href="https://github.com/Batwee/diskwee" class="github-link">Lien</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- CESI BAC+5 -->
+      <div class="tl-item tl-left type-edu">
+        <div class="tl-content">
+          <span class="tl-date">2021 - 2022</span>
+          <h2>Manager en Systèmes d'Information</h2>
+          <h4>CESI | Niveau Bac +5 (Diplômé)</h4>
+        </div>
+      </div>
+
+      <!-- ENEDIS 2 -->
+      <div class="tl-item tl-right type-exp">
+        <div class="tl-content">
+          <span class="tl-date">Sept 2021 - Nov 2022</span>
+          <h2>Pilote SI et Data Analyst</h2>
+          <h4>Enedis</h4>
+          <ul>
+            <li>Processus national sur 80 applications.</li>
+            <li><strong>Data Visualisation :</strong> PowerBI, JasperSoft.</li>
+            <li><strong>Data Virtualisation :</strong> Denodo.</li>
+            <li>Processus d’impression 3D local.</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- CESI BAC+4 -->
+      <div class="tl-item tl-left type-edu">
+        <div class="tl-content">
+          <span class="tl-date">2019 - 2021</span>
+          <h2>Responsable Ingénierie Logiciels</h2>
+          <h4>CESI | Niveau Bac +4 (Diplômé)</h4>
+        </div>
+      </div>
+
+      <!-- ENEDIS 1 -->
+      <div class="tl-item tl-right type-exp">
+        <div class="tl-content">
+          <span class="tl-date">Sept 2019 - Août 2021</span>
+          <h2>Pilote SI et Développeur Web</h2>
+          <h4>Enedis</h4>
+          <ul>
+            <li><strong>eConvention :</strong> -200 K€/DR et -0.4 ETP/DR.</li>
+            <li>App priorisation investissements (PHP, ChartJS).</li>
+            <li>Animateur LARO (Formation développeurs).</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- EDEMOCRATIE (EFFET FLUIDE) -->
+      <div class="tl-item tl-left type-exp">
+        <div class="tl-content">
+          <span class="tl-date">Déc 2018 - Avr 2019</span>
+          <h2>Mobile Developer</h2>
+          <h4>eDemocratie</h4>
+          <p>MVP SCRUM/KANBAN. Ionic 1 et 4. UI avec graphiste.</p>
+          
+          <div class="fluid-wrapper project-visual">
+            <div class="fluid-front" style="background-image: url('img/transition.png');"></div>
+            <div class="fluid-back">
+              <div class="fluid-code">
+<pre><code>@Component({
+  selector: 'app-home',
+  templateUrl: 'home.html'
+})
+export class HomePage {}</code></pre>
+              </div>
+            </div>
+          </div>
+          <a href="https://drive.google.com/open?id=1hfJwg6Ln_20MDhIGIv4ts8B7Hy0wzGW9" class="github-link">Voir la présentation <i class="fas fa-arrow-right"></i></a>
+        </div>
+      </div>
+
+      <!-- BTS SIO -->
+      <div class="tl-item tl-right type-edu">
+        <div class="tl-content">
+          <span class="tl-date">2018 - 2019</span>
+          <h2>BTS SIO - SLAM</h2>
+          <h4>Lycée Mermoz | Niveau Bac +2 (Diplômé)</h4>
+        </div>
+      </div>
+
+      <!-- PROJETS BTS NESTI (EFFET FLUIDE) -->
+      <div class="tl-item tl-left type-proj">
+        <div class="tl-content">
+          <span class="tl-date">Projets BTS SIO</span>
+          <h2>Projets Nesti & Lecteur Web</h2>
+          
+          <p style="margin-top:10px;"><strong>Client Lourd JAVA :</strong></p>
+          <div class="fluid-wrapper project-visual" style="height: 140px; margin-top:5px;">
+            <div class="fluid-front" style="background-image: url('img/nestilourd.png');"></div>
+            <div class="fluid-back"><div class="fluid-code"><pre><code>new MainWindow().setVisible(true);</code></pre></div></div>
+          </div>
+          
+          <p style="margin-top:15px;"><strong>Client Léger PHP :</strong></p>
+          <div class="fluid-wrapper project-visual" style="height: 140px; margin-top:5px;">
+            <div class="fluid-front" style="background-image: url('img/nestileger.png');"></div>
+            <div class="fluid-back"><div class="fluid-code"><pre><code>$req = $pdo->query("SELECT *");</code></pre></div></div>
+          </div>
+          
+          <a href="https://lecteurvideo.000webhostapp.com/" class="github-link" style="margin-top:15px;">Lecteur Audio JS <i class="fas fa-arrow-right"></i></a>
+        </div>
+      </div>
+
+      <!-- VEILLE TECH (BTS) -->
+      <div class="tl-item tl-right type-proj">
+        <div class="tl-content">
+          <span class="tl-date">Veille Technologique</span>
+          <h2>Recherches BTS</h2>
+          <div>
+            <a href="https://drive.google.com/open?id=1KCX3__D6PyC8y2to740Uko7W7rO9290q" class="github-link" style="display:block;"><i class="fas fa-file-powerpoint"></i> Huawei Ban</a>
+            <a href="https://drive.google.com/open?id=1I_RMxIUJIZVOcCztmYfiGHofhDpO3Pgj" class="github-link" style="display:block;"><i class="fas fa-file-powerpoint"></i> Google Duplex</a>
+            <a href="https://drive.google.com/open?id=1zUpRysziKpxBOYRVwIOk7BdcsPdczhXi" class="github-link" style="display:block;"><i class="fas fa-file-powerpoint"></i> Smartphones Pliables</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- LICENCE & 2048 -->
+      <div class="tl-item tl-left type-edu">
+        <div class="tl-content">
+          <span class="tl-date">2016 - 2018</span>
+          <h2>Licence Informatique</h2>
+          <h4>Faculté des Sciences (Partiel)</h4>
+          
+          <h4 style="margin-top:20px; font-weight:600; color:var(--text-main);">Projet d'étude : Jeu 2048</h4>
+          <div class="fluid-wrapper project-visual">
+            <div class="fluid-front" style="background-image: url('img/2048i.png');"></div>
+            <div class="fluid-back">
+              <div class="fluid-code">
+<pre><code>def spawn_number(grid):
+    r, c = random.choice(empty)
+    grid[r][c] = 2</code></pre>
+              </div>
+            </div>
+          </div>
+          <a href="https://drive.google.com/open?id=1zwnNOlI9n1oCxIBztg7QT5LuYbx-2GYC" class="github-link">Voir le code <i class="fas fa-arrow-right"></i></a>
+        </div>
+      </div>
+
+      <!-- BAC S -->
+      <div class="tl-item tl-right type-edu">
+        <div class="tl-content">
+          <span class="tl-date">2016</span>
+          <h2>BAC S - Informatique</h2>
+          <h4>Lycée Pompidou (Diplômé)</h4>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- LE MOTEUR PHYSIQUE "FLUIDE/RESSORT" -->
   <script>
-    document.querySelectorAll('.project-visual').forEach(visual => {
-      visual.addEventListener('mousemove', (e) => {
-        const rect = visual.getBoundingClientRect();
-        const x = e.clientX - rect.left;
-        const y = e.clientY - rect.top;
-        visual.style.setProperty('--mouse-x', `${x}px`);
-        visual.style.setProperty('--mouse-y', `${y}px`);
-      });
-    });
+    class FluidEffect {
+      constructor(element) {
+        this.element = element;
+        this.bounds = this.element.getBoundingClientRect();
+        // Position cible (là où est la souris)
+        this.targetX = this.bounds.width / 2;
+        this.targetY = this.bounds.height / 2;
+        // Position actuelle (animée)
+        this.currentX = this.targetX;
+        this.currentY = this.targetY;
+        // Vélocité pour le rebond
+        this.velX = 0;
+        this.velY = 0;
+        // Paramètres de la physique (plus spring est haut, plus ça va vite. Plus friction est haut, moins ça rebondit longtemps)
+        this.spring = 0.08;
+        this.friction = 0.75;
+
+        this.element.addEventListener('mousemove', (e) => {
+          this.bounds = this.element.getBoundingClientRect();
+          this.targetX = e.clientX - this.bounds.left;
+          this.targetY = e.clientY - this.bounds.top;
+        });
+
+        this.element.addEventListener('mouseleave', () => {
+          // Quand on sort, la lampe torche retourne doucement au centre
+          this.targetX = this.bounds.width / 2;
+          this.targetY = this.bounds.height / 2;
+        });
+
+        this.animate = this.animate.bind(this);
+        requestAnimationFrame(this.animate);
+      }
+
+      animate() {
+        // Calcul de la distance
+        let dx = this.targetX - this.currentX;
+        let dy = this.targetY - this.currentY;
+
+        // Application de l'élasticité (ressort)
+        this.velX += dx * this.spring;
+        this.velY += dy * this.spring;
+
+        // Application de la friction (pour que ça s'arrête)
+        this.velX *= this.friction;
+        this.velY *= this.friction;
+
+        // Mise à jour de la position
+        this.currentX += this.velX;
+        this.currentY += this.velY;
+
+        // Injection dans le CSS
+        this.element.style.setProperty('--mask-x', `${this.currentX}px`);
+        this.element.style.setProperty('--mask-y', `${this.currentY}px`);
+
+        requestAnimationFrame(this.animate);
+      }
+    }
+
+    // Initialisation sur l'en-tête et tous les projets visuels
+    document.querySelectorAll('.fluid-wrapper').forEach(el => new FluidEffect(el));
   </script>
 </body>
 </html>
