@@ -3,346 +3,169 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Baptiste GARAY — Portfolio</title>
+  <title>Baptiste GARAY — Portfolio Tech</title>
   <link rel="stylesheet" href="style.css">
-  <!-- Fonts et FontAwesome légers chargés via CDN -->
+  <!-- Polices pour l'UI et pour le Code -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 </head>
 <body>
 
-  <!-- En-tête -->
+  <!-- Background animé (particules/glow css purs) -->
+  <div class="bg-glow"></div>
+
   <header class="hero">
     <div class="container hero-content">
-      <div class="profile-img-container">
-        <!-- Remplacer l'URL ci-dessous par ton image hébergée à distance -->
-        <img src="https://picsum.photos/id/1005/200/200" alt="Baptiste Garay" class="profile-img">
-      </div>
-      <h1>Baptiste GARAY</h1>
-      <p class="subtitle">Chef de Projet SI & Developer</p>
-      <div class="contact-links">
-        <a href="mailto:baptiste.garay@gmail.com"><i class="fas fa-envelope"></i> Email</a>
-        <a href="tel:0602312419"><i class="fas fa-phone"></i> 06 02 31 24 19</a>
-        <a href="https://linkedin.com/in/baptistegaray" target="_blank" rel="noopener"><i class="fab fa-linkedin"></i> LinkedIn</a>
-        <a href="https://github.com/Batwee" target="_blank" rel="noopener"><i class="fab fa-github"></i> GitHub</a>
+      <div class="hero-text">
+        <h1 class="glitch" data-text="Baptiste GARAY">Baptiste GARAY</h1>
+        <p class="subtitle">&lt; Chef de Projet SI & Développeur Passionné /&gt;</p>
+        <div class="contact-links">
+          <!-- Lien Canva mis à jour -->
+          <a href="https://canva.link/fdvxlpkx5easfmm" target="_blank" class="btn-primary"><i class="fas fa-file-pdf"></i> Voir mon CV</a>
+          <a href="https://github.com/Batwee" target="_blank" class="btn-secondary"><i class="fab fa-github"></i> GitHub</a>
+          <a href="https://linkedin.com/in/baptistegaray" target="_blank" class="btn-secondary"><i class="fab fa-linkedin"></i> LinkedIn</a>
+        </div>
       </div>
     </div>
   </header>
 
   <div class="container main-layout">
     
-    <!-- Timeline principale -->
-    <main class="timeline-section">
-      <h2><i class="fas fa-stream"></i> Parcours & Projets</h2>
+    <main class="content-area">
       
-      <div class="timeline">
-
-        <!-- PROJET GITHUB -->
-        <article class="timeline-item type-project">
-          <div class="timeline-marker"></div>
-          <div class="timeline-content">
-            <span class="badge badge-tech">Février 2026</span>
-            <h3>Forcer le passage à Windows 11</h3>
-            <p class="role">Windows / Registre / Admin Système</p>
-            <p>Solution permettant de faciliter la migration vers Windows 11 de PC non officiellement compatibles via le registre. Projets destinés aux parcs informatiques scolaires.</p>
-            
-            <div class="project-media">
-              <!-- Placeholder d'image modifiable -->
-              <img src="https://picsum.photos/seed/win11/600/300" alt="Forcer le passage à Windows 11" class="media-img">
-            </div>
-
-            <div class="project-footer">
-              <a href="https://forge.example.com/forcer-le-passage-a-win-11" target="_blank" class="btn-link"><i class="fas fa-code-branch"></i> Voir le dépôt Forge</a>
-            </div>
+      <!-- Section InfoWee -->
+      <section class="infowee-section">
+        <div class="section-header">
+          <h2><i class="fas fa-building"></i> Mon Entreprise</h2>
+        </div>
+        <div class="infowee-card">
+          <div class="infowee-img-container">
+            <!-- Remplace cette source par le lien direct vers l'image de ta fiche Google -->
+            <img src="https://picsum.photos/id/0/400/300" alt="Devanture InfoWee Vendargues" class="infowee-img">
           </div>
-        </article>
-
-        <!-- EXPÉRIENCE PRO -->
-        <article class="timeline-item type-exp">
-          <div class="timeline-marker"></div>
-          <div class="timeline-content">
-            <span class="badge badge-exp">Janvier 2023 - 2026</span>
-            <h3>Micro-Entreprise et Formateur</h3>
-            <p class="role">InfoWee / Enseignement</p>
-            <ul>
-              <li>Professeur d’informatique au Lycée Honoré de Balzac.</li>
-              <li>Formateur Informatique en Programmation chez Ynov Campus Montpellier.</li>
-              <li>Création de sites PHP et d’une application de finance en React.</li>
-              <li>InfoWee : Maintenance informatique, domotique et intelligence artificielle.</li>
-            </ul>
+          <div class="infowee-info">
+            <h3>InfoWee - Baptiste GARAY</h3>
+            <p class="tagline">Dépannage Informatique & Services Numériques</p>
+            <p class="location"><i class="fas fa-map-marker-alt"></i> Vendargues & Montpellier</p>
+            <p class="desc">
+              Si l'entreprise a été <strong>officiellement fondée en 2025</strong>, l'histoire commence bien plus tôt : passionné de tech depuis toujours, je gère des dépannages informatiques, réseaux et hardware pour mon entourage depuis le collège (avant 2016).
+            </p>
           </div>
-        </article>
+        </div>
+      </section>
 
-        <!-- PROJET GITHUB -->
-        <article class="timeline-item type-project">
-          <div class="timeline-marker"></div>
-          <div class="timeline-content">
-            <span class="badge badge-tech">Projet Open Source</span>
-            <h3>UpdateVotes</h3>
-            <p class="role">JavaScript / Node.js / GitHub Actions</p>
-            <p>Pipeline automatisé de récupération, nettoyage et transformation de données de scrutins de l’Assemblée nationale. Génération d’un jeu de données JSON léger mis à jour automatiquement.</p>
-            
-            <div class="project-media">
-              <img src="https://picsum.photos/seed/votes/600/300" alt="UpdateVotes" class="media-img">
-            </div>
-
-            <div class="project-footer">
-              <a href="https://github.com/Batwee/updatevotes" target="_blank" class="btn-link"><i class="fab fa-github"></i> Batwee/updatevotes</a>
-            </div>
-          </div>
-        </article>
-
-        <!-- PROJET GITHUB -->
-        <article class="timeline-item type-project">
-          <div class="timeline-marker"></div>
-          <div class="timeline-content">
-            <span class="badge badge-tech">Projet Open Source</span>
-            <h3>Incendies France</h3>
-            <p class="role">Python / Streamlit / Folium</p>
-            <p>Application cartographique interactive de suivi des incendies en France à partir de données satellitaires et météorologiques.</p>
-            
-            <div class="project-media">
-              <img src="https://picsum.photos/seed/incendies/600/300" alt="Incendies France" class="media-img">
-            </div>
-
-            <div class="project-footer">
-              <a href="https://github.com/Batwee/incendies-france" target="_blank" class="btn-link"><i class="fab fa-github"></i> Batwee/incendies-france</a>
-            </div>
-          </div>
-        </article>
-
-        <!-- PROJET GITHUB -->
-        <article class="timeline-item type-project">
-          <div class="timeline-marker"></div>
-          <div class="timeline-content">
-            <span class="badge badge-tech">Projet Open Source</span>
-            <h3>WeeInvest</h3>
-            <p class="role">React Native / Supabase / API</p>
-            <p>Application mobile de suivi de portefeuille et d’analyse de marchés financiers, avec indicateurs techniques, visualisation des allocations et récupération de données via API.</p>
-            
-            <div class="project-media">
-              <img src="https://picsum.photos/seed/weeinvest/600/300" alt="WeeInvest" class="media-img">
-            </div>
-
-            <div class="project-footer">
-              <a href="https://github.com/Batwee/weeinvest" target="_blank" class="btn-link"><i class="fab fa-github"></i> Batwee/weeinvest</a>
-            </div>
-          </div>
-        </article>
-
-        <!-- FORMATION -->
-        <article class="timeline-item type-edu">
-          <div class="timeline-marker"></div>
-          <div class="timeline-content">
-            <span class="badge badge-edu">2021 - 2022</span>
-            <h3>Manager en Systèmes d'Information (Bac +5)</h3>
-            <p class="role">CESI — Diplômé</p>
-          </div>
-        </article>
-
-        <!-- EXPÉRIENCE PRO -->
-        <article class="timeline-item type-exp">
-          <div class="timeline-marker"></div>
-          <div class="timeline-content">
-            <span class="badge badge-exp">Septembre 2021 - Novembre 2022</span>
-            <h3>Pilote de Projet SI et Data Analyst</h3>
-            <p class="role">Enedis</p>
-            <ul>
-              <li><strong>Gestion de Projet :</strong> Déploiement d'un processus national sur 80 applications.</li>
-              <li><strong>Data Visualisation & Virtualisation :</strong> Utilisation de PowerBI, JasperSoft et Denodo pour consolider les données métier.</li>
-              <li><strong>Maquettage & Tests :</strong> Élaboration de matrices de tests et validation de prototypes client.</li>
-              <li><strong>Communauté 3D :</strong> Animation de la communauté locale d'impression 3D.</li>
-            </ul>
-          </div>
-        </article>
-
-        <!-- FORMATION -->
-        <article class="timeline-item type-edu">
-          <div class="timeline-marker"></div>
-          <div class="timeline-content">
-            <span class="badge badge-edu">2019 - 2021</span>
-            <h3>Responsable en Ingénierie des Logiciels (Bac +4)</h3>
-            <p class="role">CESI — Diplômé</p>
-          </div>
-        </article>
-
-        <!-- EXPÉRIENCE PRO -->
-        <article class="timeline-item type-exp">
-          <div class="timeline-marker"></div>
-          <div class="timeline-content">
-            <span class="badge badge-exp">Septembre 2019 - Août 2021</span>
-            <h3>Pilote de Projet SI et Développeur Web</h3>
-            <p class="role">Enedis</p>
-            <ul>
-              <li><strong>Application eConvention :</strong> Réduction de -200 K€/DR et -0.4 ETP/DR sur 25 Directions Régionales.</li>
-              <li><strong>Développement Web :</strong> Création de l'application « Aide à la priorisation des investissements » (PHP, MariaDB, Chart.js).</li>
-              <li><strong>Design Sprint & Agilité :</strong> Rédaction de cahiers des charges fonctionnels/techniques et tests utilisateurs.</li>
-              <li><strong>Animation LARO :</strong> Accueil, formation et organisation des réunions mensuelles dev.</li>
-            </ul>
-          </div>
-        </article>
-
-        <!-- PROJET GITHUB -->
-        <article class="timeline-item type-project">
-          <div class="timeline-marker"></div>
-          <div class="timeline-content">
-            <span class="badge badge-tech">Projet Open Source</span>
-            <h3>Analyse financière de députés</h3>
-            <p class="role">Python / Node.js / Streamlit</p>
-            <p>Application de traitement et de visualisation de données publiques, avec récupération automatisée des données HATVP et interface interactive.</p>
-            
-            <div class="project-media">
-              <img src="https://picsum.photos/seed/hatvp/600/300" alt="Analyse financière" class="media-img">
-            </div>
-
-            <div class="project-footer">
-              <a href="https://github.com/Batwee/analyse-financiere-deputee" target="_blank" class="btn-link"><i class="fab fa-github"></i> Batwee/analyse-financiere-deputee</a>
-            </div>
-          </div>
-        </article>
-
-        <!-- FORMATION -->
-        <article class="timeline-item type-edu">
-          <div class="timeline-marker"></div>
-          <div class="timeline-content">
-            <span class="badge badge-edu">2018 - 2019</span>
-            <h3>BTS SIO - SLAM (Bac +2)</h3>
-            <p class="role">Lycée Mermoz — Diplômé</p>
-          </div>
-        </article>
-
-        <!-- EXPÉRIENCE PRO -->
-        <article class="timeline-item type-exp">
-          <div class="timeline-marker"></div>
-          <div class="timeline-content">
-            <span class="badge badge-exp">Décembre 2018 - Avril 2019</span>
-            <h3>Mobile Developer</h3>
-            <p class="role">eDemocratie</p>
-            <p>Développement d'une application mobile MVP sous Ionic 1 & 4 avec méthodes Agile (SCRUM/KANBAN). Travail en binôme avec un graphiste (maquettes/wireframes).</p>
-          </div>
-        </article>
-
-        <!-- PROJET GITHUB -->
-        <article class="timeline-item type-project">
-          <div class="timeline-marker"></div>
-          <div class="timeline-content">
-            <span class="badge badge-tech">Projet Open Source</span>
-            <h3>Election</h3>
-            <p class="role">Python / Streamlit</p>
-            <p>Application d’exploration et de visualisation de données électorales.</p>
-            
-            <div class="project-media">
-              <img src="https://picsum.photos/seed/election/600/300" alt="Election" class="media-img">
-            </div>
-
-            <div class="project-footer">
-              <a href="https://github.com/Batwee/election" target="_blank" class="btn-link"><i class="fab fa-github"></i> Batwee/election</a>
-            </div>
-          </div>
-        </article>
-
-        <!-- PROJET GITHUB -->
-        <article class="timeline-item type-project">
-          <div class="timeline-marker"></div>
-          <div class="timeline-content">
-            <span class="badge badge-tech">Projet Open Source</span>
-            <h3>Diskwee</h3>
-            <p class="role">Python / PhotoRec</p>
-            <p>Outil simplifiant la récupération de fichiers à partir de supports de stockage, basé sur le moteur PhotoRec.</p>
-            
-            <div class="project-media">
-              <img src="https://picsum.photos/seed/diskwee/600/300" alt="Diskwee" class="media-img">
-            </div>
-
-            <div class="project-footer">
-              <a href="https://github.com/Batwee/diskwee" target="_blank" class="btn-link"><i class="fab fa-github"></i> Batwee/diskwee</a>
-            </div>
-          </div>
-        </article>
-
-        <!-- FORMATION -->
-        <article class="timeline-item type-edu">
-          <div class="timeline-marker"></div>
-          <div class="timeline-content">
-            <span class="badge badge-edu">2016 - 2018</span>
-            <h3>Licence Informatique (Bac +1)</h3>
-            <p class="role">Faculté des Sciences (FDS) — Partiel</p>
-          </div>
-        </article>
-
-        <!-- FORMATION -->
-        <article class="timeline-item type-edu">
-          <div class="timeline-marker"></div>
-          <div class="timeline-content">
-            <span class="badge badge-edu">2016</span>
-            <h3>BAC S - Option ISN</h3>
-            <p class="role">Lycée Pompidou — Diplômé</p>
-          </div>
-        </article>
-
-      </div>
-    </main>
-
-    <!-- Barre latérale : Compétences & Infos -->
-    <aside class="sidebar">
-      <div class="widget">
-        <h3><i class="fas fa-code"></i> Compétences</h3>
+      <!-- Section Projets GitHub -->
+      <section class="projects-section">
+        <div class="section-header">
+          <h2><i class="fas fa-code"></i> Projets Open Source & GitHub</h2>
+        </div>
         
-        <div class="skill-group">
-          <h4>Langages</h4>
-          <div class="tags">
-            <span class="tag">SQL</span><span class="tag">JS</span><span class="tag">Java</span>
-            <span class="tag">Python</span><span class="tag">Angular</span><span class="tag">PHP</span>
-          </div>
+        <div class="projects-grid">
+          
+          <!-- Projet 1 -->
+          <article class="project-card">
+            <div class="project-visual">
+              <div class="visual-inner">
+                <!-- Recto : Image de l'UI -->
+                <div class="visual-front">
+                  <img src="https://picsum.photos/seed/updatevotes/600/400" alt="UpdateVotes UI">
+                </div>
+                <!-- Verso : Le code source -->
+                <div class="visual-back">
+                  <pre><code>
+// UpdateVotes Pipeline
+const fs = require('fs');
+const fetch = require('node-fetch');
+
+async function processVotes() {
+  const data = await fetch(API_URL);
+  const cleanData = data.filter(v => v.valid);
+  return generateLightJson(cleanData);
+}
+                  </code></pre>
+                </div>
+              </div>
+            </div>
+            <div class="project-info">
+              <div class="tech-tags"><span class="tag js">JS</span><span class="tag node">Node.js</span></div>
+              <h3>UpdateVotes</h3>
+              <p>Pipeline automatisé de nettoyage et transformation de données de scrutins de l’Assemblée nationale. Génération d'un jeu de données JSON léger.</p>
+              <a href="https://github.com/Batwee/updatevotes" target="_blank" class="github-link"><i class="fab fa-github"></i> Voir le code</a>
+            </div>
+          </article>
+
+          <!-- Projet 2 -->
+          <article class="project-card">
+            <div class="project-visual">
+              <div class="visual-inner">
+                <div class="visual-front">
+                  <img src="https://picsum.photos/seed/incendies/600/400" alt="Incendies France UI">
+                </div>
+                <div class="visual-back">
+                  <pre><code>
+# Incendies France
+import streamlit as st
+import folium
+from streamlit_folium import folium_static
+
+def render_map(fire_data):
+    m = folium.Map(location=[46.6, 2.2], zoom_start=6)
+    for fire in fire_data:
+        folium.Marker(fire.coords).add_to(m)
+    folium_static(m)
+                  </code></pre>
+                </div>
+              </div>
+            </div>
+            <div class="project-info">
+              <div class="tech-tags"><span class="tag py">Python</span><span class="tag st">Streamlit</span></div>
+              <h3>Incendies France</h3>
+              <p>Application cartographique interactive de suivi des incendies en France à partir de données satellitaires et météorologiques.</p>
+              <a href="https://github.com/Batwee/incendies-france" target="_blank" class="github-link"><i class="fab fa-github"></i> Voir le code</a>
+            </div>
+          </article>
+
+          <!-- Projet 3 -->
+          <article class="project-card">
+            <div class="project-visual">
+              <div class="visual-inner">
+                <div class="visual-front">
+                  <img src="https://picsum.photos/seed/weeinvest/600/400" alt="WeeInvest UI">
+                </div>
+                <div class="visual-back">
+                  <pre><code>
+// WeeInvest Mobile App
+import { createClient } from '@supabase/supabase-js'
+
+export const fetchPortfolio = async () => {
+  const { data, error } = await supabase
+    .from('allocations')
+    .select('*')
+  if (error) console.error(error)
+  return calculateIndicators(data)
+}
+                  </code></pre>
+                </div>
+              </div>
+            </div>
+            <div class="project-info">
+              <div class="tech-tags"><span class="tag rn">React Native</span><span class="tag db">Supabase</span></div>
+              <h3>WeeInvest</h3>
+              <p>Application mobile de suivi de portefeuille et d’analyse financière avec indicateurs techniques et dataviz.</p>
+              <a href="https://github.com/Batwee/weeinvest" target="_blank" class="github-link"><i class="fab fa-github"></i> Voir le code</a>
+            </div>
+          </article>
+
         </div>
-
-        <div class="skill-group">
-          <h4>Frameworks & Libs</h4>
-          <div class="tags">
-            <span class="tag">React</span><span class="tag">Bootstrap</span><span class="tag">Streamlit</span>
-          </div>
-        </div>
-
-        <div class="skill-group">
-          <h4>DevOps & Outils</h4>
-          <div class="tags">
-            <span class="tag">Docker</span><span class="tag">Jenkins</span><span class="tag">Checkmarx</span>
-          </div>
-        </div>
-
-        <div class="skill-group">
-          <h4>Design & Modélisation</h4>
-          <div class="tags">
-            <span class="tag">Figma</span><span class="tag">Miro</span><span class="tag">Fusion360</span><span class="tag">Cura</span>
-          </div>
-        </div>
-
-        <div class="skill-group">
-          <h4>Management & Méthodes</h4>
-          <div class="tags">
-            <span class="tag">SCRUM</span><span class="tag">KANBAN</span><span class="tag">AMDEC</span><span class="tag">Gantt</span>
-          </div>
-        </div>
-      </div>
-
-      <div class="widget">
-        <h3><i class="fas fa-heart"></i> Intérêts</h3>
-        <ul class="interests-list">
-          <li><i class="fas fa-newspaper"></i> Nouvelles Technologies & Keynotes</li>
-          <li><i class="fab fa-youtube"></i> YouTuber News Tech</li>
-          <li><i class="fas fa-skating"></i> Roller Rando (tous les lundis)</li>
-          <li><i class="fas fa-cube"></i> DIY & Impression 3D</li>
-        </ul>
-      </div>
-    </aside>
-
+      </section>
+    </main>
   </div>
 
   <footer>
     <div class="container text-center">
-      <p>2026 © Baptiste GARAY — Portfolio optimisé pour Free Pages Perso</p>
+      <p>Développé avec passion | 2026 © Baptiste GARAY</p>
     </div>
   </footer>
 
