@@ -4,11 +4,16 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Baptiste GARAY — Portfolio Apple Style</title>
+  
+  <!-- Polices et Icônes -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
   
+  <!-- Three.js CDN pour l'effet WebGL Fluide -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+
   <style>
     /* --- STYLE APPLE : VARIABLES & RESET --- */
     :root {
@@ -37,19 +42,19 @@
 
     .container { max-width: 1000px; margin: 0 auto; padding: 0 20px; }
 
-    /* --- STRUCTURE DE L'EFFET FLUIDE (TRAÎNÉE) --- */
-    .reveal-container {
+    /* --- STRUCTURE DU MASQUE REVEAL WEBGL --- */
+    .webgl-reveal {
       position: relative;
       overflow: hidden;
+      cursor: crosshair;
     }
 
-    /* Couche du dessous : Le Code (Toujours visible, mais caché derrière) */
+    /* Couche du dessous : Le Code HTML */
     .code-underneath {
       position: absolute;
       inset: 0;
       z-index: 1;
-      background: #111113; /* Fond sombre Apple */
-      color: #f5f5f7;
+      background: #111113; /* Fond sombre pour contraster le code */
       display: flex;
       align-items: center;
       justify-content: center;
@@ -61,7 +66,7 @@
       position: absolute;
       inset: 0;
       background: linear-gradient(135deg, #007aff, #5856d6, #ff2d55);
-      opacity: 0.15;
+      opacity: 0.12;
       z-index: -1;
     }
 
@@ -73,14 +78,13 @@
       white-space: pre-wrap;
     }
 
-    /* Couche du dessus : L'image ou le Header (Masquée au passage de la souris) */
-    .top-layer {
-      position: relative;
+    /* Le Canvas WebGL généré en JS (Couche du dessus avec l'image) */
+    .webgl-reveal canvas {
+      position: absolute;
+      inset: 0;
       z-index: 2;
-      background: var(--bg-card);
-      width: 100%;
-      height: 100%;
-      /* Le masque sera appliqué dynamiquement ici en JS */
+      pointer-events: none; /* Laisse passer la souris vers le parent */
+      border-radius: inherit;
     }
 
     /* --- EN-TÊTE / PROFIL --- */
@@ -89,13 +93,19 @@
       border-radius: 30px;
       box-shadow: 0 10px 30px rgba(0,0,0,0.05);
       text-align: center;
+      background: var(--bg-card); /* Fallback si JS désactivé */
     }
 
-    .header-front {
+    /* Contenu de l'en-tête (mis derrière l'image par le WebGL) */
+    .header-content {
       padding: 60px 20px;
       display: flex;
       flex-direction: column;
       align-items: center;
+      position: absolute;
+      inset: 0;
+      z-index: 3; /* Exception: le texte d'en-tête doit rester par dessus l'image WebGL */
+      pointer-events: none; /* Laisse la souris interagir avec le fond WebGL */
     }
 
     .avatar {
@@ -116,6 +126,7 @@
       justify-content: center;
       flex-wrap: wrap;
       gap: 15px;
+      pointer-events: auto; /* Permet de cliquer sur les liens */
     }
     
     .contact-info a, .contact-info span {
@@ -130,10 +141,19 @@
       align-items: center;
       gap: 8px;
       transition: all 0.2s;
-      position: relative;
-      z-index: 10; /* Pour rester cliquable */
     }
     .contact-info a:hover { background: var(--border); }
+
+    /* Fix pour la hauteur du header */
+    .header-wrapper {
+      position: relative;
+      height: 400px;
+      border-radius: 30px;
+    }
+    /* Sur mobile, on augmente la hauteur du header pour tout afficher */
+    @media screen and (max-width: 600px) {
+      .header-wrapper { height: 500px; }
+    }
 
     /* --- COMPÉTENCES & INTÉRÊTS --- */
     .dashboard {
@@ -234,12 +254,6 @@
       height: 200px;
       margin-top: 20px;
       box-shadow: inset 0 0 0 1px rgba(0,0,0,0.1);
-      cursor: crosshair;
-    }
-    .project-img {
-      background-size: cover;
-      background-position: center;
-      border-radius: 16px;
     }
 
     /* --- RESPONSIVE --- */
@@ -255,10 +269,12 @@
 
   <div class="container">
     
-    <!-- HEADER AVEC LA TRAÎNÉE FLUIDE -->
-    <header class="reveal-container">
-      <!-- Le code caché dessous -->
-      <div class="code-underneath">
+    <!-- HEADER AVEC L'EFFET WEBGL FLUIDE -->
+    <!-- Le data-image charge un fond blanc uni stylé Apple, qui sera "gommé" pour révéler le code -->
+    <header class="header-wrapper webgl-reveal" data-image="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=1000&auto=format&fit=crop">
+      
+      <!-- Le code caché dessous (Couche 1) -->
+      <div class="code-underneath" style="border-radius: 30px;">
         <div class="fluid-code">
 <pre><code>const profile = {
   name: "Baptiste GARAY",
@@ -270,8 +286,8 @@
         </div>
       </div>
       
-      <!-- L'interface visible (qui se fait gommer par la souris) -->
-      <div class="top-layer header-front">
+      <!-- Le contenu de l'en-tête (Couche 3 : Toujours visible par dessus) -->
+      <div class="header-content">
         <img src="img/avatar.jpg" alt="Baptiste Garay" class="avatar">
         <h1>Baptiste GARAY</h1>
         <p class="subtitle">Chef de Projet / Développeur / Passionné Tech</p>
@@ -367,7 +383,7 @@
         </div>
       </div>
 
-      <!-- UPDATEVOTES (AVEC LA TRAÎNÉE FLUIDE) -->
+      <!-- UPDATEVOTES (EFFET WEBGL FLUIDE) -->
       <div class="tl-item tl-left type-proj">
         <div class="tl-content">
           <span class="tl-date">Projet GitHub</span>
@@ -375,7 +391,7 @@
           <h4>JavaScript / Node.js / GitHub Actions</h4>
           <p>Pipeline automatisé de nettoyage de données de scrutins de l’Assemblée nationale.</p>
           
-          <div class="reveal-container project-visual">
+          <div class="webgl-reveal project-visual" data-image="https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=1000&auto=format&fit=crop">
             <div class="code-underneath">
 <div class="fluid-code"><pre><code>async function cleanData() {
   const raw = await fetch('api');
@@ -383,7 +399,6 @@
   return json.map(v => ({ id: v.id }));
 }</code></pre></div>
             </div>
-            <div class="top-layer project-img" style="background-image: url('https://picsum.photos/seed/votes/600/400');"></div>
           </div>
           <a href="https://github.com/Batwee/updatevotes" class="github-link">Repo GitHub <i class="fas fa-arrow-right"></i></a>
         </div>
@@ -397,14 +412,13 @@
           <h4>Python / Streamlit / Folium</h4>
           <p>Application cartographique de suivi des incendies en France.</p>
           
-          <div class="reveal-container project-visual">
+          <div class="webgl-reveal project-visual" data-image="https://images.unsplash.com/photo-1543285198-3af15c4592ce?q=80&w=1000&auto=format&fit=crop">
             <div class="code-underneath">
 <div class="fluid-code"><pre><code>def init_map():
     m = folium.Map(location=[46, 2])
     folium.Marker([43.6, 3.8]).add_to(m)
     return m</code></pre></div>
             </div>
-            <div class="top-layer project-img" style="background-image: url('https://picsum.photos/seed/fire/600/400');"></div>
           </div>
           <a href="https://github.com/Batwee/incendies-france" class="github-link">Repo GitHub <i class="fas fa-arrow-right"></i></a>
         </div>
@@ -418,7 +432,7 @@
           <h4>React Native / Supabase</h4>
           <p>App mobile de suivi de portefeuille et d’analyse financière.</p>
           
-          <div class="reveal-container project-visual">
+          <div class="webgl-reveal project-visual" data-image="https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?q=80&w=1000&auto=format&fit=crop">
             <div class="code-underneath">
 <div class="fluid-code"><pre><code>export default function Portfolio() {
   useEffect(() => {
@@ -426,7 +440,6 @@
   }, [])
 }</code></pre></div>
             </div>
-            <div class="top-layer project-img" style="background-image: url('https://picsum.photos/seed/invest/600/400');"></div>
           </div>
           <a href="https://github.com/Batwee/weeinvest" class="github-link">Repo GitHub <i class="fas fa-arrow-right"></i></a>
         </div>
@@ -500,7 +513,7 @@
           <h4>eDemocratie</h4>
           <p>MVP SCRUM/KANBAN. Ionic 1 et 4. UI avec graphiste.</p>
           
-          <div class="reveal-container project-visual">
+          <div class="webgl-reveal project-visual" data-image="img/transition.png">
             <div class="code-underneath">
 <div class="fluid-code"><pre><code>@Component({
   selector: 'app-home',
@@ -508,7 +521,6 @@
 })
 export class HomePage {}</code></pre></div>
             </div>
-            <div class="top-layer project-img" style="background-image: url('img/transition.png');"></div>
           </div>
           <a href="https://drive.google.com/open?id=1hfJwg6Ln_20MDhIGIv4ts8B7Hy0wzGW9" class="github-link">Voir la présentation <i class="fas fa-arrow-right"></i></a>
         </div>
@@ -530,15 +542,13 @@ export class HomePage {}</code></pre></div>
           <h2>Projets Nesti & Lecteur Web</h2>
           
           <p style="margin-top:10px;"><strong>Client Lourd JAVA :</strong></p>
-          <div class="reveal-container project-visual" style="height: 140px; margin-top:5px;">
+          <div class="webgl-reveal project-visual" data-image="img/nestilourd.png" style="height: 140px; margin-top:5px;">
             <div class="code-underneath"><div class="fluid-code"><pre><code>new MainWindow().setVisible(true);</code></pre></div></div>
-            <div class="top-layer project-img" style="background-image: url('img/nestilourd.png');"></div>
           </div>
           
           <p style="margin-top:15px;"><strong>Client Léger PHP :</strong></p>
-          <div class="reveal-container project-visual" style="height: 140px; margin-top:5px;">
+          <div class="webgl-reveal project-visual" data-image="img/nestileger.png" style="height: 140px; margin-top:5px;">
             <div class="code-underneath"><div class="fluid-code"><pre><code>$req = $pdo->query("SELECT *");</code></pre></div></div>
-            <div class="top-layer project-img" style="background-image: url('img/nestileger.png');"></div>
           </div>
           
           <a href="https://lecteurvideo.000webhostapp.com/" class="github-link" style="margin-top:15px;">Lecteur Audio JS <i class="fas fa-arrow-right"></i></a>
@@ -566,13 +576,12 @@ export class HomePage {}</code></pre></div>
           <h4>Faculté des Sciences (Partiel)</h4>
           
           <h4 style="margin-top:20px; font-weight:600; color:var(--text-main);">Projet d'étude : Jeu 2048</h4>
-          <div class="reveal-container project-visual">
+          <div class="webgl-reveal project-visual" data-image="img/2048i.png">
             <div class="code-underneath">
 <div class="fluid-code"><pre><code>def spawn_number(grid):
     r, c = random.choice(empty)
     grid[r][c] = 2</code></pre></div>
             </div>
-            <div class="top-layer project-img" style="background-image: url('img/2048i.png');"></div>
           </div>
           <a href="https://drive.google.com/open?id=1zwnNOlI9n1oCxIBztg7QT5LuYbx-2GYC" class="github-link">Voir le code <i class="fas fa-arrow-right"></i></a>
         </div>
@@ -590,83 +599,151 @@ export class HomePage {}</code></pre></div>
     </div>
   </div>
 
-  <!-- SCRIPT DU MASQUE FLUIDE (TRAÎNÉE QUI S'EFFACE) -->
+  <!-- LE MOTEUR WEBGL (THREE.JS) POUR LE "CURSOR MASK REVEAL" -->
   <script>
-    class FluidTrailMask {
+    class WebGLRevealMask {
       constructor(container) {
         this.container = container;
-        this.topLayer = container.querySelector('.top-layer');
+        this.imgUrl = container.getAttribute('data-image');
         
-        // ID unique pour le masque SVG
-        this.id = 'mask-' + Math.random().toString(36).substring(2, 9);
+        // Initialisation de la scène Three.js
+        this.scene = new THREE.Scene();
+        this.camera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1);
         
-        // Création du SVG (Invisible, sert juste à générer le masque CSS)
-        this.svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
-        this.svg.style.cssText = "width:0; height:0; position:absolute; pointer-events:none;";
-        this.svg.innerHTML = `
-          <defs>
-            <!-- Flou pour adoucir les bords de la gomme liquide -->
-            <filter id="blur-${this.id}"><feGaussianBlur stdDeviation="15" /></filter>
-            <mask id="${this.id}" maskUnits="userSpaceOnUse" x="0" y="0" width="100%" height="100%">
-              <!-- Fond blanc = tout est visible -->
-              <rect width="100%" height="100%" fill="white" />
-              <!-- Les cercles noirs effaceront l'image -->
-              <g id="trail-group-${this.id}" filter="url(#blur-${this.id})"></g>
-            </mask>
-          </defs>
-        `;
-        document.body.appendChild(this.svg);
-        this.group = this.svg.querySelector(`#trail-group-${this.id}`);
+        this.renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+        this.renderer.setSize(this.container.clientWidth, this.container.clientHeight);
+        this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+        this.container.appendChild(this.renderer.domElement);
 
-        // On applique le masque au calque du dessus
-        this.topLayer.style.webkitMaskImage = `url(#${this.id})`;
-        this.topLayer.style.maskImage = `url(#${this.id})`;
-
-        this.points = [];
-
-        // Écoute de la souris
-        this.container.addEventListener('mousemove', (e) => {
-          const rect = this.container.getBoundingClientRect();
-          const x = e.clientX - rect.left;
-          const y = e.clientY - rect.top;
-          
-          // Création d'une "goutte" noire qui va gommer l'image
-          let circle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
-          circle.setAttribute("r", "50"); // Taille du pinceau
-          circle.setAttribute("fill", "black");
-          this.group.appendChild(circle);
-          
-          this.points.push({x, y, age: 0, el: circle});
+        // Chargement de l'image (texture) avec CrossOrigin pour éviter les blocages de sécurité
+        const loader = new THREE.TextureLoader();
+        loader.setCrossOrigin("anonymous");
+        loader.load(this.imgUrl, (texture) => {
+          this.initShader(texture);
         });
 
-        this.animate = this.animate.bind(this);
-        requestAnimationFrame(this.animate);
+        // Variables de la souris
+        this.mouse = new THREE.Vector2(0.5, 0.5);
+        this.targetMouse = new THREE.Vector2(0.5, 0.5);
+        
+        // État de survol (0 = invisible, 1 = taille max)
+        this.hoverState = 0;
+        this.targetHover = 0;
+
+        // Gestion des événements souris
+        this.container.addEventListener('mousemove', (e) => {
+          const rect = this.container.getBoundingClientRect();
+          this.targetMouse.x = (e.clientX - rect.left) / rect.width;
+          // Inversion de l'axe Y pour WebGL
+          this.targetMouse.y = 1.0 - ((e.clientY - rect.top) / rect.height);
+          this.targetHover = 1.0; // Ouvre le masque
+        });
+
+        this.container.addEventListener('mouseleave', () => {
+          // Quand on quitte, la taille du masque (targetHover) tombe à 0
+          // Il ne retourne pas au centre, il se referme là où il est !
+          this.targetHover = 0.0; 
+        });
+
+        window.addEventListener('resize', () => this.resize());
+      }
+
+      initShader(texture) {
+        this.uniforms = {
+          u_image: { value: texture },
+          u_mouse: { value: this.mouse },
+          u_time: { value: 0 },
+          u_resolution: { value: new THREE.Vector2(this.container.clientWidth, this.container.clientHeight) },
+          u_hoverState: { value: 0 }
+        };
+
+        const material = new THREE.ShaderMaterial({
+          uniforms: this.uniforms,
+          vertexShader: `
+            varying vec2 vUv;
+            void main() {
+              vUv = uv;
+              gl_Position = vec4(position, 1.0);
+            }
+          `,
+          fragmentShader: `
+            uniform sampler2D u_image;
+            uniform vec2 u_mouse;
+            uniform float u_time;
+            uniform vec2 u_resolution;
+            uniform float u_hoverState;
+            varying vec2 vUv;
+
+            void main() {
+              vec2 uv = vUv;
+              
+              // Correction du ratio pour que le cercle soit rond et pas ovale
+              vec2 aspect = vec2(u_resolution.x / u_resolution.y, 1.0);
+              vec2 mouseDist = (uv - u_mouse) * aspect;
+              
+              // C'EST ICI QU'EST LA MAGIE DE LA DÉFORMATION LIQUIDE
+              // On utilise des fonctions sinusoïdales basées sur le temps et la position
+              float distortion = sin(uv.y * 20.0 + u_time * 3.0) * 0.02 + 
+                                 cos(uv.x * 20.0 + u_time * 2.0) * 0.02;
+              
+              // On ajoute la distorsion liquide uniquement sur les bords du masque
+              float dist = length(mouseDist) + (distortion * u_hoverState);
+
+              // Paramètres du masque : "Adjustable reveal size and edge softness"
+              // Le rayon grandit jusqu'à 0.25 (ou 0.30 pour l'en-tête) en fonction du hoverState
+              float radius = 0.25 * u_hoverState; 
+              float softness = 0.15;
+
+              // Smoothstep crée le trou en rendant les pixels transparents (alpha = 0) près de la souris
+              float alpha = smoothstep(radius, radius + softness, dist);
+
+              // On récupère la couleur de l'image (AUCUN assombrissement, AUCUN flou d'image)
+              vec4 texColor = texture2D(u_image, uv);
+              
+              // On applique la transparence calculée
+              gl_FragColor = vec4(texColor.rgb, texColor.a * alpha);
+            }
+          `,
+          transparent: true
+        });
+
+        const geometry = new THREE.PlaneGeometry(2, 2);
+        this.mesh = new THREE.Mesh(geometry, material);
+        this.scene.add(this.mesh);
+
+        this.clock = new THREE.Clock();
+        this.animate();
+      }
+
+      resize() {
+         if(!this.renderer) return;
+         this.renderer.setSize(this.container.clientWidth, this.container.clientHeight);
+         if(this.uniforms) {
+           this.uniforms.u_resolution.value.set(this.container.clientWidth, this.container.clientHeight);
+         }
       }
 
       animate() {
-        // Mise à jour de la traînée
-        this.points.forEach(p => {
-          p.age++;
-          p.el.setAttribute("cx", p.x);
-          p.el.setAttribute("cy", p.y);
-          
-          // La goutte s'estompe avec le temps (elle arrête de gommer)
-          // 40 = durée de la traînée. Plus c'est grand, plus la traînée est longue.
-          p.el.setAttribute("opacity", 1 - (p.age / 40));
-        });
-
-        // Suppression des vieilles gouttes du DOM
-        while(this.points.length > 0 && this.points[0].age >= 40) {
-          let p = this.points.shift();
-          this.group.removeChild(p.el);
+        requestAnimationFrame(() => this.animate());
+        
+        // LERP (suivi fluide avec traînée de la souris)
+        this.mouse.lerp(this.targetMouse, 0.15);
+        
+        // LERP sur l'ouverture/fermeture du masque (il s'ouvre/se ferme en douceur)
+        this.hoverState += (this.targetHover - this.hoverState) * 0.1;
+        
+        if (this.uniforms) {
+          this.uniforms.u_mouse.value.copy(this.mouse);
+          this.uniforms.u_hoverState.value = this.hoverState;
+          this.uniforms.u_time.value = this.clock.getElapsedTime();
         }
-
-        requestAnimationFrame(this.animate);
+        
+        this.renderer.render(this.scene, this.camera);
       }
     }
 
-    // Initialisation de l'effet magique sur l'en-tête et tous les projets
-    document.querySelectorAll('.reveal-container').forEach(el => new FluidTrailMask(el));
+    // On lance la machine Three.js sur le Header et sur chaque projet GitHub/BTS
+    document.querySelectorAll('.webgl-reveal').forEach(el => new WebGLRevealMask(el));
   </script>
 </body>
 </html>
