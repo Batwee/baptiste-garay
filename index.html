@@ -17,7 +17,6 @@
       --text-main: #1d1d1f;
       --text-muted: #86868b;
       --accent: #007aff;
-      --accent-gradient: linear-gradient(135deg, #007aff, #5856d6, #ff2d55);
       --border: #d2d2d7;
       
       /* Typographie Apple System */
@@ -38,51 +37,30 @@
 
     .container { max-width: 1000px; margin: 0 auto; padding: 0 20px; }
 
-    /* --- EFFET MASQUE FLUIDE LERP (COMMUN AU HEADER ET AUX PROJETS) --- */
-    .fluid-wrapper {
+    /* --- STRUCTURE DE L'EFFET FLUIDE (TRAÎNÉE) --- */
+    .reveal-container {
       position: relative;
       overflow: hidden;
-      /* Variables CSS mises à jour par JS */
-      --mask-x: 50%;
-      --mask-y: 50%;
     }
 
-    /* Couche 1 : L'image de présentation (Dessous) */
-    .fluid-front {
-      position: relative;
-      z-index: 1;
-      transition: filter 0.5s ease, transform 0.5s ease;
-      background: var(--bg-card);
-    }
-
-    /* Couche 2 : Le Code (Dessus, masqué par défaut) */
-    .fluid-back {
+    /* Couche du dessous : Le Code (Toujours visible, mais caché derrière) */
+    .code-underneath {
       position: absolute;
-      top: 0; left: 0; width: 100%; height: 100%;
-      z-index: 2;
-      background: #1d1d1f;
+      inset: 0;
+      z-index: 1;
+      background: #111113; /* Fond sombre Apple */
       color: #f5f5f7;
-      
-      /* C'est ici qu'on gère le "Adjustable reveal size and edge softness" */
-      /* Un masque radial noir très doux qui s'estompe vers le transparent */
-      -webkit-mask-image: radial-gradient(circle 180px at var(--mask-x) var(--mask-y), black 0%, rgba(0,0,0,0.4) 45%, transparent 80%);
-      mask-image: radial-gradient(circle 180px at var(--mask-x) var(--mask-y), black 0%, rgba(0,0,0,0.4) 45%, transparent 80%);
-      
-      opacity: 0;
-      transition: opacity 0.4s ease;
-      pointer-events: none; /* Laisse passer la souris pour ne pas bloquer le JS */
       display: flex;
       align-items: center;
       justify-content: center;
       padding: 30px;
     }
 
-    /* Le beau dégradé fluide en arrière-plan du code */
-    .fluid-back::before {
+    .code-underneath::before {
       content: '';
       position: absolute;
       inset: 0;
-      background: var(--accent-gradient);
+      background: linear-gradient(135deg, #007aff, #5856d6, #ff2d55);
       opacity: 0.15;
       z-index: -1;
     }
@@ -95,10 +73,15 @@
       white-space: pre-wrap;
     }
 
-    /* Au survol : apparition en douceur */
-    .fluid-wrapper:hover .fluid-back { opacity: 1; }
-    /* Optionnel : assombrit légèrement l'image derrière pour contraster */
-    .fluid-wrapper:hover .fluid-front { filter: grayscale(20%) brightness(0.7); }
+    /* Couche du dessus : L'image ou le Header (Masquée au passage de la souris) */
+    .top-layer {
+      position: relative;
+      z-index: 2;
+      background: var(--bg-card);
+      width: 100%;
+      height: 100%;
+      /* Le masque sera appliqué dynamiquement ici en JS */
+    }
 
     /* --- EN-TÊTE / PROFIL --- */
     header {
@@ -134,6 +117,7 @@
       flex-wrap: wrap;
       gap: 15px;
     }
+    
     .contact-info a, .contact-info span {
       background: var(--bg-page);
       padding: 8px 16px;
@@ -146,6 +130,8 @@
       align-items: center;
       gap: 8px;
       transition: all 0.2s;
+      position: relative;
+      z-index: 10; /* Pour rester cliquable */
     }
     .contact-info a:hover { background: var(--border); }
 
@@ -173,14 +159,13 @@
     ul.interests li { margin-bottom: 12px; font-size: 0.95rem; color: var(--text-main); display: flex; align-items: center; gap: 12px; }
     ul.interests li i { color: var(--accent); font-size: 1.1rem; width: 20px; text-align: center; }
 
-    /* --- TIMELINE VERTICALE APPLE STYLE --- */
+    /* --- TIMELINE VERTICALE --- */
     .timeline-title { text-align: center; font-size: 2.2rem; font-weight: 700; margin-bottom: 50px; letter-spacing: -0.02em; }
     
     .timeline {
       position: relative;
       margin: 0 auto 80px;
     }
-    /* Ligne très fine et discrète */
     .timeline::after {
       content: '';
       position: absolute;
@@ -190,12 +175,8 @@
       margin-left: -1px;
     }
 
-    .tl-item {
-      padding: 20px 40px;
-      position: relative;
-      width: 50%;
-    }
-    /* Le petit point central (Node) */
+    .tl-item { padding: 20px 40px; position: relative; width: 50%; }
+    
     .tl-item::after {
       content: '';
       position: absolute;
@@ -210,7 +191,6 @@
     .tl-right { left: 50%; }
     .tl-left::after { right: -8px; }
     .tl-right::after { left: -7px; }
-
     .type-exp::after { border-color: #ff2d55; }
     .type-edu::after { border-color: #34c759; }
 
@@ -236,7 +216,6 @@
     .tl-content p, .tl-content ul { font-size: 0.95rem; color: #333; margin-bottom: 12px; }
     .tl-content ul { padding-left: 20px; }
 
-    /* Liens style Apple */
     .github-link {
       display: inline-flex;
       align-items: center;
@@ -255,9 +234,9 @@
       height: 200px;
       margin-top: 20px;
       box-shadow: inset 0 0 0 1px rgba(0,0,0,0.1);
+      cursor: crosshair;
     }
-    .project-visual .fluid-front {
-      height: 100%;
+    .project-img {
       background-size: cover;
       background-position: center;
       border-radius: 16px;
@@ -276,9 +255,23 @@
 
   <div class="container">
     
-    <!-- HEADER AVEC EFFET FLUIDE LERP (SANS REBOND) -->
-    <header class="fluid-wrapper">
-      <div class="fluid-front header-front">
+    <!-- HEADER AVEC LA TRAÎNÉE FLUIDE -->
+    <header class="reveal-container">
+      <!-- Le code caché dessous -->
+      <div class="code-underneath">
+        <div class="fluid-code">
+<pre><code>const profile = {
+  name: "Baptiste GARAY",
+  role: "Développeur & Chef de Projet SI",
+  location: "Vendargues, France",
+  passion: ["Code", "DIY", "3D Printing"],
+  status: "Prêt à innover"
+};</code></pre>
+        </div>
+      </div>
+      
+      <!-- L'interface visible (qui se fait gommer par la souris) -->
+      <div class="top-layer header-front">
         <img src="img/avatar.jpg" alt="Baptiste Garay" class="avatar">
         <h1>Baptiste GARAY</h1>
         <p class="subtitle">Chef de Projet / Développeur / Passionné Tech</p>
@@ -288,19 +281,6 @@
           <a href="mailto:baptiste.garay@gmail.com"><i class="fas fa-envelope"></i> baptiste.garay@gmail.com</a>
           <a href="tel:0602312419"><i class="fas fa-phone"></i> 06 02 31 24 19</a>
           <a href="https://linkedin.com/in/baptistegaray" target="_blank"><i class="fab fa-linkedin"></i> LinkedIn</a>
-        </div>
-      </div>
-      
-      <div class="fluid-back">
-        <div class="fluid-code">
-<pre><code>const profile = {
-  name: "Baptiste GARAY",
-  role: "Développeur & Chef de Projet SI",
-  location: "Vendargues, France",
-  passion: ["Code", "DIY", "3D Printing"],
-  status: "Prêt à innover"
-};
-// Hover mask active...</code></pre>
         </div>
       </div>
     </header>
@@ -387,7 +367,7 @@
         </div>
       </div>
 
-      <!-- UPDATEVOTES (EFFET FLUIDE) -->
+      <!-- UPDATEVOTES (AVEC LA TRAÎNÉE FLUIDE) -->
       <div class="tl-item tl-left type-proj">
         <div class="tl-content">
           <span class="tl-date">Projet GitHub</span>
@@ -395,23 +375,21 @@
           <h4>JavaScript / Node.js / GitHub Actions</h4>
           <p>Pipeline automatisé de nettoyage de données de scrutins de l’Assemblée nationale.</p>
           
-          <div class="fluid-wrapper project-visual">
-            <div class="fluid-front" style="background-image: url('https://picsum.photos/seed/votes/600/400');"></div>
-            <div class="fluid-back">
-              <div class="fluid-code">
-<pre><code>async function cleanData() {
+          <div class="reveal-container project-visual">
+            <div class="code-underneath">
+<div class="fluid-code"><pre><code>async function cleanData() {
   const raw = await fetch('api');
   const json = await raw.json();
   return json.map(v => ({ id: v.id }));
-}</code></pre>
-              </div>
+}</code></pre></div>
             </div>
+            <div class="top-layer project-img" style="background-image: url('https://picsum.photos/seed/votes/600/400');"></div>
           </div>
           <a href="https://github.com/Batwee/updatevotes" class="github-link">Repo GitHub <i class="fas fa-arrow-right"></i></a>
         </div>
       </div>
 
-      <!-- INCENDIES FRANCE (EFFET FLUIDE) -->
+      <!-- INCENDIES FRANCE -->
       <div class="tl-item tl-right type-proj">
         <div class="tl-content">
           <span class="tl-date">Projet GitHub</span>
@@ -419,22 +397,20 @@
           <h4>Python / Streamlit / Folium</h4>
           <p>Application cartographique de suivi des incendies en France.</p>
           
-          <div class="fluid-wrapper project-visual">
-            <div class="fluid-front" style="background-image: url('https://picsum.photos/seed/fire/600/400');"></div>
-            <div class="fluid-back">
-              <div class="fluid-code">
-<pre><code>def init_map():
+          <div class="reveal-container project-visual">
+            <div class="code-underneath">
+<div class="fluid-code"><pre><code>def init_map():
     m = folium.Map(location=[46, 2])
     folium.Marker([43.6, 3.8]).add_to(m)
-    return m</code></pre>
-              </div>
+    return m</code></pre></div>
             </div>
+            <div class="top-layer project-img" style="background-image: url('https://picsum.photos/seed/fire/600/400');"></div>
           </div>
           <a href="https://github.com/Batwee/incendies-france" class="github-link">Repo GitHub <i class="fas fa-arrow-right"></i></a>
         </div>
       </div>
 
-      <!-- WEEINVEST (EFFET FLUIDE) -->
+      <!-- WEEINVEST -->
       <div class="tl-item tl-left type-proj">
         <div class="tl-content">
           <span class="tl-date">Projet GitHub</span>
@@ -442,17 +418,15 @@
           <h4>React Native / Supabase</h4>
           <p>App mobile de suivi de portefeuille et d’analyse financière.</p>
           
-          <div class="fluid-wrapper project-visual">
-            <div class="fluid-front" style="background-image: url('https://picsum.photos/seed/invest/600/400');"></div>
-            <div class="fluid-back">
-              <div class="fluid-code">
-<pre><code>export default function Portfolio() {
+          <div class="reveal-container project-visual">
+            <div class="code-underneath">
+<div class="fluid-code"><pre><code>export default function Portfolio() {
   useEffect(() => {
     supabase.from('allocations')
   }, [])
-}</code></pre>
-              </div>
+}</code></pre></div>
             </div>
+            <div class="top-layer project-img" style="background-image: url('https://picsum.photos/seed/invest/600/400');"></div>
           </div>
           <a href="https://github.com/Batwee/weeinvest" class="github-link">Repo GitHub <i class="fas fa-arrow-right"></i></a>
         </div>
@@ -518,7 +492,7 @@
         </div>
       </div>
 
-      <!-- EDEMOCRATIE (EFFET FLUIDE) -->
+      <!-- EDEMOCRATIE -->
       <div class="tl-item tl-left type-exp">
         <div class="tl-content">
           <span class="tl-date">Déc 2018 - Avr 2019</span>
@@ -526,17 +500,15 @@
           <h4>eDemocratie</h4>
           <p>MVP SCRUM/KANBAN. Ionic 1 et 4. UI avec graphiste.</p>
           
-          <div class="fluid-wrapper project-visual">
-            <div class="fluid-front" style="background-image: url('img/transition.png');"></div>
-            <div class="fluid-back">
-              <div class="fluid-code">
-<pre><code>@Component({
+          <div class="reveal-container project-visual">
+            <div class="code-underneath">
+<div class="fluid-code"><pre><code>@Component({
   selector: 'app-home',
   templateUrl: 'home.html'
 })
-export class HomePage {}</code></pre>
-              </div>
+export class HomePage {}</code></pre></div>
             </div>
+            <div class="top-layer project-img" style="background-image: url('img/transition.png');"></div>
           </div>
           <a href="https://drive.google.com/open?id=1hfJwg6Ln_20MDhIGIv4ts8B7Hy0wzGW9" class="github-link">Voir la présentation <i class="fas fa-arrow-right"></i></a>
         </div>
@@ -551,22 +523,22 @@ export class HomePage {}</code></pre>
         </div>
       </div>
 
-      <!-- PROJETS BTS NESTI (EFFET FLUIDE) -->
+      <!-- PROJETS BTS NESTI -->
       <div class="tl-item tl-left type-proj">
         <div class="tl-content">
           <span class="tl-date">Projets BTS SIO</span>
           <h2>Projets Nesti & Lecteur Web</h2>
           
           <p style="margin-top:10px;"><strong>Client Lourd JAVA :</strong></p>
-          <div class="fluid-wrapper project-visual" style="height: 140px; margin-top:5px;">
-            <div class="fluid-front" style="background-image: url('img/nestilourd.png');"></div>
-            <div class="fluid-back"><div class="fluid-code"><pre><code>new MainWindow().setVisible(true);</code></pre></div></div>
+          <div class="reveal-container project-visual" style="height: 140px; margin-top:5px;">
+            <div class="code-underneath"><div class="fluid-code"><pre><code>new MainWindow().setVisible(true);</code></pre></div></div>
+            <div class="top-layer project-img" style="background-image: url('img/nestilourd.png');"></div>
           </div>
           
           <p style="margin-top:15px;"><strong>Client Léger PHP :</strong></p>
-          <div class="fluid-wrapper project-visual" style="height: 140px; margin-top:5px;">
-            <div class="fluid-front" style="background-image: url('img/nestileger.png');"></div>
-            <div class="fluid-back"><div class="fluid-code"><pre><code>$req = $pdo->query("SELECT *");</code></pre></div></div>
+          <div class="reveal-container project-visual" style="height: 140px; margin-top:5px;">
+            <div class="code-underneath"><div class="fluid-code"><pre><code>$req = $pdo->query("SELECT *");</code></pre></div></div>
+            <div class="top-layer project-img" style="background-image: url('img/nestileger.png');"></div>
           </div>
           
           <a href="https://lecteurvideo.000webhostapp.com/" class="github-link" style="margin-top:15px;">Lecteur Audio JS <i class="fas fa-arrow-right"></i></a>
@@ -594,15 +566,13 @@ export class HomePage {}</code></pre>
           <h4>Faculté des Sciences (Partiel)</h4>
           
           <h4 style="margin-top:20px; font-weight:600; color:var(--text-main);">Projet d'étude : Jeu 2048</h4>
-          <div class="fluid-wrapper project-visual">
-            <div class="fluid-front" style="background-image: url('img/2048i.png');"></div>
-            <div class="fluid-back">
-              <div class="fluid-code">
-<pre><code>def spawn_number(grid):
+          <div class="reveal-container project-visual">
+            <div class="code-underneath">
+<div class="fluid-code"><pre><code>def spawn_number(grid):
     r, c = random.choice(empty)
-    grid[r][c] = 2</code></pre>
-              </div>
+    grid[r][c] = 2</code></pre></div>
             </div>
+            <div class="top-layer project-img" style="background-image: url('img/2048i.png');"></div>
           </div>
           <a href="https://drive.google.com/open?id=1zwnNOlI9n1oCxIBztg7QT5LuYbx-2GYC" class="github-link">Voir le code <i class="fas fa-arrow-right"></i></a>
         </div>
@@ -620,31 +590,53 @@ export class HomePage {}</code></pre>
     </div>
   </div>
 
-  <!-- LE MOTEUR MASQUE FLUIDE (LERP = SANS REBOND) -->
+  <!-- SCRIPT DU MASQUE FLUIDE (TRAÎNÉE QUI S'EFFACE) -->
   <script>
-    class SmoothMask {
-      constructor(element) {
-        this.element = element;
-        this.bounds = this.element.getBoundingClientRect();
+    class FluidTrailMask {
+      constructor(container) {
+        this.container = container;
+        this.topLayer = container.querySelector('.top-layer');
         
-        // Position cible (souris)
-        this.targetX = this.bounds.width / 2;
-        this.targetY = this.bounds.height / 2;
+        // ID unique pour le masque SVG
+        this.id = 'mask-' + Math.random().toString(36).substring(2, 9);
         
-        // Position actuelle animée
-        this.currentX = this.targetX;
-        this.currentY = this.targetY;
+        // Création du SVG (Invisible, sert juste à générer le masque CSS)
+        this.svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+        this.svg.style.cssText = "width:0; height:0; position:absolute; pointer-events:none;";
+        this.svg.innerHTML = `
+          <defs>
+            <!-- Flou pour adoucir les bords de la gomme liquide -->
+            <filter id="blur-${this.id}"><feGaussianBlur stdDeviation="15" /></filter>
+            <mask id="${this.id}" maskUnits="userSpaceOnUse" x="0" y="0" width="100%" height="100%">
+              <!-- Fond blanc = tout est visible -->
+              <rect width="100%" height="100%" fill="white" />
+              <!-- Les cercles noirs effaceront l'image -->
+              <g id="trail-group-${this.id}" filter="url(#blur-${this.id})"></g>
+            </mask>
+          </defs>
+        `;
+        document.body.appendChild(this.svg);
+        this.group = this.svg.querySelector(`#trail-group-${this.id}`);
 
-        this.element.addEventListener('mousemove', (e) => {
-          this.bounds = this.element.getBoundingClientRect();
-          this.targetX = e.clientX - this.bounds.left;
-          this.targetY = e.clientY - this.bounds.top;
-        });
+        // On applique le masque au calque du dessus
+        this.topLayer.style.webkitMaskImage = `url(#${this.id})`;
+        this.topLayer.style.maskImage = `url(#${this.id})`;
 
-        this.element.addEventListener('mouseleave', () => {
-          // On recentre doucement quand la souris quitte la zone
-          this.targetX = this.bounds.width / 2;
-          this.targetY = this.bounds.height / 2;
+        this.points = [];
+
+        // Écoute de la souris
+        this.container.addEventListener('mousemove', (e) => {
+          const rect = this.container.getBoundingClientRect();
+          const x = e.clientX - rect.left;
+          const y = e.clientY - rect.top;
+          
+          // Création d'une "goutte" noire qui va gommer l'image
+          let circle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+          circle.setAttribute("r", "50"); // Taille du pinceau
+          circle.setAttribute("fill", "black");
+          this.group.appendChild(circle);
+          
+          this.points.push({x, y, age: 0, el: circle});
         });
 
         this.animate = this.animate.bind(this);
@@ -652,21 +644,29 @@ export class HomePage {}</code></pre>
       }
 
       animate() {
-        // Algorithme LERP (Linear Interpolation) :
-        // La position actuelle rattrape la cible de 15% à chaque frame.
-        // Cela crée un mouvement fluide/visqueux qui s'arrête NET (zéro rebond).
-        this.currentX += (this.targetX - this.currentX) * 0.15;
-        this.currentY += (this.targetY - this.currentY) * 0.15;
+        // Mise à jour de la traînée
+        this.points.forEach(p => {
+          p.age++;
+          p.el.setAttribute("cx", p.x);
+          p.el.setAttribute("cy", p.y);
+          
+          // La goutte s'estompe avec le temps (elle arrête de gommer)
+          // 40 = durée de la traînée. Plus c'est grand, plus la traînée est longue.
+          p.el.setAttribute("opacity", 1 - (p.age / 40));
+        });
 
-        this.element.style.setProperty('--mask-x', `${this.currentX}px`);
-        this.element.style.setProperty('--mask-y', `${this.currentY}px`);
+        // Suppression des vieilles gouttes du DOM
+        while(this.points.length > 0 && this.points[0].age >= 40) {
+          let p = this.points.shift();
+          this.group.removeChild(p.el);
+        }
 
         requestAnimationFrame(this.animate);
       }
     }
 
-    // Initialisation sur l'en-tête et tous les projets visuels
-    document.querySelectorAll('.fluid-wrapper').forEach(el => new SmoothMask(el));
+    // Initialisation de l'effet magique sur l'en-tête et tous les projets
+    document.querySelectorAll('.reveal-container').forEach(el => new FluidTrailMask(el));
   </script>
 </body>
 </html>
