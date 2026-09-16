@@ -38,7 +38,7 @@
 
     .container { max-width: 1000px; margin: 0 auto; padding: 0 20px; }
 
-    /* --- EFFET FLUIDE & RESSORT (COMMUN AU HEADER ET AUX PROJETS) --- */
+    /* --- EFFET MASQUE FLUIDE LERP (COMMUN AU HEADER ET AUX PROJETS) --- */
     .fluid-wrapper {
       position: relative;
       overflow: hidden;
@@ -47,6 +47,7 @@
       --mask-y: 50%;
     }
 
+    /* Couche 1 : L'image de présentation (Dessous) */
     .fluid-front {
       position: relative;
       z-index: 1;
@@ -54,6 +55,7 @@
       background: var(--bg-card);
     }
 
+    /* Couche 2 : Le Code (Dessus, masqué par défaut) */
     .fluid-back {
       position: absolute;
       top: 0; left: 0; width: 100%; height: 100%;
@@ -61,20 +63,21 @@
       background: #1d1d1f;
       color: #f5f5f7;
       
-      /* Le masque radial qui crée l'effet lampe torche */
-      -webkit-mask-image: radial-gradient(circle 200px at var(--mask-x) var(--mask-y), black 10%, transparent 80%);
-      mask-image: radial-gradient(circle 200px at var(--mask-x) var(--mask-y), black 10%, transparent 80%);
+      /* C'est ici qu'on gère le "Adjustable reveal size and edge softness" */
+      /* Un masque radial noir très doux qui s'estompe vers le transparent */
+      -webkit-mask-image: radial-gradient(circle 180px at var(--mask-x) var(--mask-y), black 0%, rgba(0,0,0,0.4) 45%, transparent 80%);
+      mask-image: radial-gradient(circle 180px at var(--mask-x) var(--mask-y), black 0%, rgba(0,0,0,0.4) 45%, transparent 80%);
       
       opacity: 0;
-      transition: opacity 0.5s ease;
-      pointer-events: none; /* Laisse passer la souris */
+      transition: opacity 0.4s ease;
+      pointer-events: none; /* Laisse passer la souris pour ne pas bloquer le JS */
       display: flex;
       align-items: center;
       justify-content: center;
       padding: 30px;
     }
 
-    /* Le beau dégradé animé en arrière-plan du code */
+    /* Le beau dégradé fluide en arrière-plan du code */
     .fluid-back::before {
       content: '';
       position: absolute;
@@ -92,8 +95,10 @@
       white-space: pre-wrap;
     }
 
+    /* Au survol : apparition en douceur */
     .fluid-wrapper:hover .fluid-back { opacity: 1; }
-    .fluid-wrapper:hover .fluid-front { filter: grayscale(50%) blur(2px); transform: scale(0.98); }
+    /* Optionnel : assombrit légèrement l'image derrière pour contraster */
+    .fluid-wrapper:hover .fluid-front { filter: grayscale(20%) brightness(0.7); }
 
     /* --- EN-TÊTE / PROFIL --- */
     header {
@@ -271,7 +276,7 @@
 
   <div class="container">
     
-    <!-- HEADER AVEC EFFET FLUIDE -->
+    <!-- HEADER AVEC EFFET FLUIDE LERP (SANS REBOND) -->
     <header class="fluid-wrapper">
       <div class="fluid-front header-front">
         <img src="img/avatar.jpg" alt="Baptiste Garay" class="avatar">
@@ -295,7 +300,7 @@
   passion: ["Code", "DIY", "3D Printing"],
   status: "Prêt à innover"
 };
-// Hover pour révéler la source...</code></pre>
+// Hover mask active...</code></pre>
         </div>
       </div>
     </header>
@@ -615,24 +620,20 @@ export class HomePage {}</code></pre>
     </div>
   </div>
 
-  <!-- LE MOTEUR PHYSIQUE "FLUIDE/RESSORT" -->
+  <!-- LE MOTEUR MASQUE FLUIDE (LERP = SANS REBOND) -->
   <script>
-    class FluidEffect {
+    class SmoothMask {
       constructor(element) {
         this.element = element;
         this.bounds = this.element.getBoundingClientRect();
-        // Position cible (là où est la souris)
+        
+        // Position cible (souris)
         this.targetX = this.bounds.width / 2;
         this.targetY = this.bounds.height / 2;
-        // Position actuelle (animée)
+        
+        // Position actuelle animée
         this.currentX = this.targetX;
         this.currentY = this.targetY;
-        // Vélocité pour le rebond
-        this.velX = 0;
-        this.velY = 0;
-        // Paramètres de la physique (plus spring est haut, plus ça va vite. Plus friction est haut, moins ça rebondit longtemps)
-        this.spring = 0.08;
-        this.friction = 0.75;
 
         this.element.addEventListener('mousemove', (e) => {
           this.bounds = this.element.getBoundingClientRect();
@@ -641,7 +642,7 @@ export class HomePage {}</code></pre>
         });
 
         this.element.addEventListener('mouseleave', () => {
-          // Quand on sort, la lampe torche retourne doucement au centre
+          // On recentre doucement quand la souris quitte la zone
           this.targetX = this.bounds.width / 2;
           this.targetY = this.bounds.height / 2;
         });
@@ -651,23 +652,12 @@ export class HomePage {}</code></pre>
       }
 
       animate() {
-        // Calcul de la distance
-        let dx = this.targetX - this.currentX;
-        let dy = this.targetY - this.currentY;
+        // Algorithme LERP (Linear Interpolation) :
+        // La position actuelle rattrape la cible de 15% à chaque frame.
+        // Cela crée un mouvement fluide/visqueux qui s'arrête NET (zéro rebond).
+        this.currentX += (this.targetX - this.currentX) * 0.15;
+        this.currentY += (this.targetY - this.currentY) * 0.15;
 
-        // Application de l'élasticité (ressort)
-        this.velX += dx * this.spring;
-        this.velY += dy * this.spring;
-
-        // Application de la friction (pour que ça s'arrête)
-        this.velX *= this.friction;
-        this.velY *= this.friction;
-
-        // Mise à jour de la position
-        this.currentX += this.velX;
-        this.currentY += this.velY;
-
-        // Injection dans le CSS
         this.element.style.setProperty('--mask-x', `${this.currentX}px`);
         this.element.style.setProperty('--mask-y', `${this.currentY}px`);
 
@@ -676,7 +666,7 @@ export class HomePage {}</code></pre>
     }
 
     // Initialisation sur l'en-tête et tous les projets visuels
-    document.querySelectorAll('.fluid-wrapper').forEach(el => new FluidEffect(el));
+    document.querySelectorAll('.fluid-wrapper').forEach(el => new SmoothMask(el));
   </script>
 </body>
 </html>
